@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="性能优化," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="对移动开发来说，手机的资源是非常有限的。所以，APP的性能显得尤为重要。">
+<meta name="keywords" content="性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 性能优化">
+<meta property="og:url" content="http://haocc.me/2015/04/16/performance_optimization/index.html">
+<meta property="og:site_name" content="彼时の博客">
+<meta property="og:description" content="对移动开发来说，手机的资源是非常有限的。所以，APP的性能显得尤为重要。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2015-09-28T09:17:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 性能优化">
+<meta name="twitter:description" content="对移动开发来说，手机的资源是非常有限的。所以，APP的性能显得尤为重要。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haocc.me/2015/04/16/performance_optimization/"/>
+
+
+
+
+
+  <title>Android 性能优化 | 彼时の博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?291ffd01144d4a281f8b8611ac894df9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">彼时の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">代码如诗，诗如代码</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haocc.me/2015/04/16/performance_optimization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haocc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="彼时の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 性能优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-16T21:00:00+08:00">
+                2015-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/16/performance_optimization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/16/performance_optimization/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对移动开发来说，手机的资源是非常有限的。所以，APP的性能显得尤为重要。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#写在前面<br>&emsp;&emsp;笔者android入坑一年多，偶然一次机会仔细阅读了<a href="http://hukai.me/android-performance-patterns" target="_blank" rel="external">Android性能优化典范</a>和<a href="http://www.shangrenxiu.com/JXTGLASS2014/253091.html" target="_blank" rel="external">手机淘宝性能优化</a>之后,决定花些时间付诸实践一下，并总结于此与你们分享。<a id="more"></a></p>
+<p>##两个概念：</p>
+<ol>
+<li>响应时间<br>指从用户操作开始到系统给用户以正确反馈的时间。一般包括逻辑处理时间 + 网络传输时间 + 展现时间。对于非网络类应用不包括网络传输时间。展现时间即网页或 App 界面渲染时间。响应时间是用户对性能最直接的感受。</li>
+<li>TPS(Transaction Per Second)<br>TPS为每秒处理的事务数，是系统吞吐量的指标，在搜索系统中也用QPS(Query Per Second)衡量。TPS一般与响应时间反相关。</li>
+</ol>
+<p>&emsp;&emsp;<strong>通常所说的性能问题就是指响应时间过长、系统吞吐量过低</strong></p>
+<p>##一个本质：</p>
+<ol>
+<li>降低执行时间：<br>a.利用多线程并发或分布式提高 TPS<br>b.缓存(包括对象缓存、IO 缓存、网络缓存等)<br>c.数据结构和算法优化<br>d.性能更优的底层接口调用，如 JNI 实现<br>e.逻辑优化<br>d.需求优化 </li>
+<li>同步改异步，利用多线程提高TPS </li>
+<li>提前或延迟操作，错峰提高TPS</li>
+</ol>
+<p>&emsp;&emsp;<strong>针对上述方式，可以对数据库、布局、Java代码部分以及网络等进行优化</strong></p>
+<p>#优化策略</p>
+<p>##数据库优化</p>
+<p>###索引<br>&emsp;&emsp;对一个程序来说，对数据库最多的操作是查询。而数据库一般都是通过索引来查找数据的。那么，合适的索引就可以大大提高数据库查询的效率。</p>
+<ol>
+<li>索引使用场景<br>a.当某字段数据更新频率较低，查询频率较高，经常有范围查询(&gt;, &lt;, =, &gt;=, &lt;=)或order by、group by发生时建议使用索引。并且选择度越大，建索引越有优势，这里选择度指一个字段中唯一值的数量/总的数量。<br>b.经常同时存取多列，且每列都含有重复值可考虑建立复合索引 </li>
+<li>索引使用规则<br>a.对于复合索引，把使用最频繁的列做为前导列(索引中第一个字段)。如果查询时前导列不在查询条件中则该复合索引不会被使用。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">create unique index PK_GRADE_CLASS on student (grade, class)</div><div class="line">select * from student where class = 2  //未使用到索引</div><div class="line">select * from dept where grade = 3   //使用到了索引</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>&emsp;&emsp;b.避免对索引列进行计算，对where子句列的任何计算如果不能被编译优化，都会导致查询时索引失效。<code>select * from student where tochar(grade)=&#39;2&#39;</code><br>&emsp;&emsp;c.比较值避免使用NULL<br>&emsp;&emsp;d.多表查询时要注意是选择合适的表做为内表。连接条件要充份考虑带有索引的表、行数多的表，内外表的选择可由公式：外层表中的匹配行数*内层表中每一次查找的次数确定，乘积最小为最佳方案。实际多表操作在被实际执行前，查询优化器会根据连接条件，列出几组可能的连接方案并从中找出系统开销最小的最佳方案。<br>&emsp;&emsp;e.查询列与索引列次序一致<br>&emsp;&emsp;f.用多表连接代替EXISTS子句<br>&emsp;&emsp;g.把过滤记录数最多的条件放在最前面<br>&emsp;&emsp;h.善于使用存储过程，它使sql变得更加灵活和高效(Sqlite不支持存储过程) </p>
+<p>&emsp;&emsp;<strong>索引检验:建立了索引后，对于某条sql语句是否使用到了索引可以通过执行计划查看是否用到了索引。</strong></p>
+<p>###事务</p>
+<ol>
+<li>原子提交<br>原则提交意味着同一事务内的所有修改要么都完成要么都不做，如果某个修改失败，会自动回滚使得所有修改不生效。</li>
+<li>更优性能<br>Sqlite默认会为每个插入、更新操作创建一个事务，并且在每次插入、更新后立即提交。这样如果连续插入100次数据实际是创建事务-&gt;执行语句-&gt;提交这个过程被重复执行了100次。如果我们显示的创建事务-&gt;执行100条语句-&gt;提交会使得这个创建事务和提交这个过程只做一次，通过这种一次性事务可以使得性能大幅提升。尤其当数据库位于sd卡时，时间上能节省两个数量级左右。Sqlte显示使用事务，示例代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public void insertWithOneTransaction() &#123;</div><div class="line">    SQLiteDatabase db = sqliteOpenHelper.getWritableDatabase();</div><div class="line">    // Begins a transaction</div><div class="line">    db.beginTransaction();</div><div class="line">    try &#123;</div><div class="line">        // your sqls</div><div class="line">        for (int i = 0; i &lt; 100; i++) &#123;</div><div class="line">            db.insert(yourTableName, null, value);</div><div class="line">        &#125;</div><div class="line">        // marks the current transaction as successful</div><div class="line">        db.setTransactionSuccessful();</div><div class="line">    &#125; catch (Exception e) &#123;</div><div class="line">        // process it</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125; finally &#123;</div><div class="line">        // end a transaction</div><div class="line">        db.endTransaction();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>&emsp;&emsp;其中sqliteOpenHelper.getWritableDatabase()表示得到写表权限。</p>
+<p>###其他针对Sqlite的优化</p>
+<ol>
+<li>语句的拼接使用StringBuilder代替String<br>这个就不多说了，简单的string相加会导致创建多个临时对象消耗性能。StringBuilder的空间预分配性能好得多。如果你对字符串的长度有大致了解，如100字符左右，可以直接new StringBuilder(128)指定初始大小，减少空间不够时的再次分配。</li>
+<li>查询时返回更少的结果集及更少的字段。<br>查询时只取需要的字段和结果集，更多的结果集会消耗更多的时间及内存，更多的字段会导致更多的内存消耗。</li>
+<li>少用cursor.getColumnIndex<br>根据性能调优过程中的观察cursor.getColumnIndex的时间消耗跟cursor.getInt相差无几。可以在建表的时候用static变量记住某列的index，直接调用相应index而不是每次查询。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public static final String HTTP_RESPONSE_TABLE_ID = android.provider.BaseColumns._ID;</div><div class="line">public static final String HTTP_RESPONSE_TABLE_RESPONSE = &quot;response&quot;;</div><div class="line">public List&lt;Object&gt; getData() &#123;</div><div class="line">    ……</div><div class="line">    cursor.getString(cursor.getColumnIndex(HTTP_RESPONSE_TABLE_RESPONSE));</div><div class="line">    ……</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;优化为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public static final String HTTP_RESPONSE_TABLE_ID = android.provider.BaseColumns._ID;</div><div class="line">public static final String HTTP_RESPONSE_TABLE_RESPONSE = &quot;response&quot;;</div><div class="line">public static final int HTTP_RESPONSE_TABLE_ID_INDEX = 0;</div><div class="line">public static final int HTTP_RESPONSE_TABLE_URL_INDEX = 1;</div><div class="line">public List&lt;Object&gt; getData() &#123;</div><div class="line">    ……</div><div class="line">    cursor.getString(HTTP_RESPONSE_TABLE_RESPONSE_INDEX);</div><div class="line">    ……</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>###异步线程<br>&emsp;&emsp;Sqlite是常用于嵌入式开发中的关系型数据库，完全开源。与Web常用的数据库Mysql、Oracle db、sql server不同，Sqlite是一个内嵌式的数据库，数据库服务器就在你的程序中，无需网络配置和管理，数据库服务器端和客户端运行在同一进程内，减少了网络访问的消耗，简化了数据库管理。不过Sqlite在并发、数据库大小、网络方面存在局限性，并且为表级锁，所以也没必要多线程操作。<br>&emsp;&emsp;Android中数据不多时表查询可能耗时不多，不会导致anr，不过大于100ms时同样会让用户感觉到延时和卡顿，可以放在线程中运行，但sqlite在并发方面存在局限，多线程控制较麻烦，这时候可使用单线程池，在任务中执行db操作，通过handler返回结果和ui线程交互，既不会影响UI线程，同时也能防止并发带来的异常。可使用Android提供的AsyncQueryHandler或类似如下代码完成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();</div><div class="line">singleThreadExecutor.execute(new Runnable() &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">        // db operetions, u can use handler to send message after</div><div class="line">        db.insert(yourTableName, null, value);</div><div class="line">        handler.sendEmptyMessage(xx);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>##布局优化</p>
+<p>###抽象布局标签</p>
+<ol>
+<li>&lt;include&gt;标签<br>include标签常用于将布局中的公共部分提取出来供其他layout共用，以实现布局模块化，这在布局编写方便提供了大大的便利。&lt;include&gt;标签唯一需要的属性是layout属性，指定需要包含的布局文件。可以定义android:id和android:layout_…属性来覆盖被引入布局根节点的对应属性值。注意重新定义android:id后，子布局的顶结点i就会发生变化。</li>
+<li>&lt;viewstub&gt;标签<br>viewstub标签同include标签一样可以用来引入一个外部布局，不同的是，viewstub引入的布局默认不会扩张，即既不会占用显示也不会占用位置，从而在解析layout时节省cpu和内存。viewstub常用来引入那些默认不会显示，只在特殊情况下显示的布局，如进度布局、网络失败显示的刷新布局、信息出错出现的提示布局等。下面以在一个布局main.xml中加入网络错误时的提示页面network_error.xml为例。main.mxl代码如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot; &gt;</div><div class="line"></div><div class="line">    ……</div><div class="line">    &lt;ViewStub</div><div class="line">        android:id=&quot;@+id/network_error_layout&quot;</div><div class="line">        android:layout_width=&quot;match_parent&quot;</div><div class="line">        android:layout_height=&quot;match_parent&quot;</div><div class="line">        android:layout=&quot;@layout/network_error&quot; /&gt;</div><div class="line"></div><div class="line">&lt;/RelativeLayout&gt;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;其中network_error.xml为只有在网络错误时才需要显示的布局，默认不会被解析，示例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">    android:layout_width=&quot;match_parent&quot;</div><div class="line">    android:layout_height=&quot;match_parent&quot; &gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/network_setting&quot;</div><div class="line">        android:layout_width=&quot;@dimen/dp_160&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:layout_centerHorizontal=&quot;true&quot;</div><div class="line">        android:text=&quot;@string/network_setting&quot; /&gt;</div><div class="line"></div><div class="line">    &lt;Button</div><div class="line">        android:id=&quot;@+id/network_refresh&quot;</div><div class="line">        android:layout_width=&quot;@dimen/dp_160&quot;</div><div class="line">        android:layout_height=&quot;wrap_content&quot;</div><div class="line">        android:layout_below=&quot;@+id/network_setting&quot;</div><div class="line">        android:layout_centerHorizontal=&quot;true&quot;</div><div class="line">        android:layout_marginTop=&quot;@dimen/dp_10&quot;</div><div class="line">        android:text=&quot;@string/network_refresh&quot; /&gt;</div><div class="line"></div><div class="line">&lt;/RelativeLayout&gt;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在java中通过(ViewStub)findViewById(id)找到ViewStub，通过stub.inflate()展开ViewStub，然后得到子View，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">private View networkErrorView;</div><div class="line">private void showNetError() &#123;</div><div class="line">    // not repeated infalte</div><div class="line">    if (networkErrorView != null) &#123;</div><div class="line">        networkErrorView.setVisibility(View.VISIBLE);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ViewStub stub = (ViewStub)findViewById(R.id.network_error_layout);</div><div class="line">    networkErrorView = stub.inflate();</div><div class="line">    Button networkSetting = (Button)networkErrorView.findViewById(R.id.network_setting);</div><div class="line">    Button refresh = (Button)findViewById(R.id.network_refresh);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void showNormal() &#123;</div><div class="line">    if (networkErrorView != null) &#123;</div><div class="line">        networkErrorView.setVisibility(View.GONE);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在上面showNetError()中展开了ViewStub，同时我们对networkErrorView进行了保存，这样下次不用继续inflate。这就是后面第三部分提到的减少不必要的infalte。viewstub标签大部分属性同include标签类似。上面展开ViewStub部分代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ViewStub stub = (ViewStub)findViewById(R.id.network_error_layout);</div><div class="line">networkErrorView = stub.inflate();</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;也可以写成下面的形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">View viewStub = findViewById(R.id.network_error_layout);</div><div class="line">viewStub.setVisibility(View.VISIBLE);   // ViewStub被展开后的布局所替换</div><div class="line">networkErrorView =  findViewById(R.id.network_error_layout); // 获取展开后的布局</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;效果一致，只是不用显示的转换为ViewStub。通过viewstub的原理我们可以知道将一个view设置为GONE不会被解析，从而提高layout解析速度，而VISIBLE和INVISIBLE这两个可见性属性会被正常解析。</p>
+<p>3.&lt;merge&gt;标签<br>&emsp;&emsp;在使用了include后可能导致布局嵌套过多，多余不必要的layout节点，从而导致解析变慢，不必要的节点和嵌套可通过hierarchy viewer(下面布局调优工具中有具体介绍)或设置-&gt;开发者选项-&gt;显示布局边界查看。<br>merge标签可用于两种典型情况：</p>
+<ul>
+<li>布局顶结点是FrameLayout且不需要设置background或padding等属性，可以用merge代替，因为Activity内容试图的parent view就是个FrameLayout，所以可以用merge消除只剩一个。</li>
+<li>某布局作为子布局被其他布局include时，使用merge当作该布局的顶节点，这样在被引入时顶结点会自动被忽略，而将其子节点全部合并到主布局中。</li>
+</ul>
+<p>###去除不必要的嵌套和View节点</p>
+<ol>
+<li>首次不需要使用的节点设置为GONE或使用viewstub</li>
+<li>使用RelativeLayout代替LinearLayout<br>大约在Android4.0之前，新建工程的默认main.xml中顶节点是LinearLayout，而在之后已经改为RelativeLayout，因为RelativeLayout性能更优，且可以简单实现LinearLayout嵌套才能实现的布局。<br>4.0及以上Android版本可通过设置-&gt;开发者选项-&gt;显示布局边界打开页面布局显示，看看是否有不必要的节点和嵌套。4.0以下版本可通过hierarchy viewer查看。</li>
+<li>减少不必要的infalte<br>(1)对于inflate的布局可以直接缓存，用全部变量代替局部变量，避免下次需再次inflate。如上面ViewStub示例中的</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">if (networkErrorView != null) &#123;</div><div class="line">    networkErrorView.setVisibility(View.VISIBLE);</div><div class="line">    return;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;(2)ListView提供了item缓存，adapter getView的标准写法，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public View getView(int position, View convertView, ViewGroup parent) &#123;</div><div class="line">    ViewHolder holder;</div><div class="line">    if (convertView == null) &#123;</div><div class="line">        convertView = inflater.inflate(R.layout.list_item, null);</div><div class="line">        holder = new ViewHolder();</div><div class="line">        ……</div><div class="line">        convertView.setTag(holder);</div><div class="line">    &#125; else &#123;</div><div class="line">        holder = (ViewHolder)convertView.getTag();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private static class ViewHolder &#123;</div><div class="line"></div><div class="line">    ImageView appIcon;</div><div class="line">    TextView  appName;</div><div class="line">    TextView  appInfo;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###其他点</p>
+<ol>
+<li>用SurfaceView或TextureView代替普通View<br>SurfaceView或TextureView可以通过将绘图操作移动到另一个单独线程上提高性能。<br>普通View的绘制过程都是在主线程(UI线程)中完成，如果某些绘图操作影响性能就不好优化了，这时我们可以考虑使用SurfaceView和TextureView，他们的绘图操作发生在UI线程之外的另一个线程上。<br>因为SurfaceView在常规视图系统之外，所以无法像常规试图一样移动、缩放或旋转一个SurfaceView。TextureView是Android4.0引入的，除了与SurfaceView一样在单独线程绘制外，还可以像常规视图一样被改变。</li>
+<li>使用RenderJavascript<br>RenderScript是Adnroid3.0引进的用来在Android上写高性能代码的一种语言，语法给予C语言的C99标准，他的结构是独立的，所以不需要为不同的CPU或者GPU定制代码代码。</li>
+<li>使用OpenGL绘图<br>Android支持使用OpenGL API的高性能绘图，这是Android可用的最高级的绘图机制，在游戏类对性能要求较高的应用中得到广泛使用。Android 4.3最大的改变，就是支持OpenGL ES 3.0。相比2.0，3.0有更多的缓冲区对象、增加了新的着色语言、增加多纹理支持等等，将为Android游戏带来更出色的视觉体验。</li>
+<li>尽量为所有分辨率创建资源<br>减少不必要的硬件缩放，这会降低UI的绘制速度，可借助Android asset studio </li>
+<li>布局调优工具<br>(1)hierarchy viewer<br>hierarchy viewer可以方便的查看Activity的布局，各个View的属性、measure、layout、draw的时间，如果耗时较多会用红色标记，否则显示绿色。hierarchy viewer.bat位于<sdk>/tools/目录下。</sdk></li>
+</ol>
+<p>&emsp;&emsp;(2) layoutopt<br>layoutopt是一个可以提供layout及其层级优化提示的命令行，在sdk16以后已经被lint取代，在Windows-&gt;Show View-&gt;Other-&gt;Android-&gt;Lint Warnings查看lint优化提示。</p>
+<p>##移动网络优化</p>
+<p>###IP直连<br>&emsp;&emsp;省去DNS解析过程。DNS全名Domain Name System，解析意指根据域名得到其对应的IP地址。 首次域名解析一般需要几百毫秒，可通过直接向IP而非域名请求，节省掉这部分时间，同时可以预防域名劫持等带来的风险。当然为了安全和扩展考虑，这个 IP 可能是一个动态更新的 IP 列表，并在 IP 不可用情况下通过域名访问。</p>
+<p>###网络连接复用<br>&emsp;&emsp;节省连接建立时间。如开启keep-alive。Http 1.1 默认启动了keep-alive。对于Android 来说默认情况下HttpURLConnection和HttpClient都开启了keep-alive。只是2.2之前 HttpURLConnection存在影响连接池的Bug。</p>
+<p>###网络请求合并<br>&emsp;&emsp;即将多个请求合并为一个进行请求。比较常见的就是网页中的 CSS Image Sprites。 如果某个页面内请求过多，也可以考虑做一定的请求合并。</p>
+<p>###减小请求数据大小 </p>
+<ol>
+<li>对于POST请求。Body可以做Gzip压缩，如日志。 </li>
+<li>对请求头进行压缩。这个Http1.1不支持，SPDY及Http2.0支持。Http1.1可以通过服务端对前一个请求的请求头进行缓存，后面相同请求头用md5之类的id来表示即可。 </li>
+</ol>
+<p>###CDN 缓存静态资源<br>&emsp;&emsp;缓存常见的图片、JS、CSS 等静态资源。</p>
+<p>###减小返回数据大小 </p>
+<ol>
+<li>压缩<br>一般API 数据使用Gzip压缩。</li>
+<li>精简数据格式<br>如JSON 代替 XML，WebP代替其他图片格式。</li>
+<li>对于不同的设备不同网络返回不同的内容 如不同分辨率图片大小。 </li>
+<li>增量更新<br>需要数据更新时，可考虑增量更新。如常见的服务端进行 bsdiff，客户端进行 bspatch。 </li>
+<li>大文件下载<br>支持断点续传，并缓存Http Resonse的ETag标识，下次请求时带上，从而确定是否数据改变过，未改变则直接返回304。 </li>
+</ol>
+<p>###数据缓存<br>缓存获取到的数据，在一定的有效时间内再次请求可以直接从缓存读取数据。</p>
+<p>###其他优化手段 </p>
+<ol>
+<li>预取<br>包括预连接、预取数据。 </li>
+<li>分优先级、延迟部分请求<br>将不重要的请求延迟，这样既可以削峰减少并发、又可以和后面类似的请求做合并。 </li>
+<li>多连接<br>对于较大文件，如大图片、文件下载可考虑多连接。 需要控制请求的最大并发量，毕竟移动端网络受限。 </li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/14/android_mvp/" rel="next" title="Android MVP">
+                <i class="fa fa-chevron-left"></i> Android MVP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/05/17/animation_of_android/" rel="prev" title="Android Animation">
+                Android Animation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/04/16/performance_optimization/"
+           data-title="Android 性能优化" data-url="http://haocc.me/2015/04/16/performance_optimization/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png"
+              alt="haocc" />
+          
+            <p class="site-author-name" itemprop="name">haocc</p>
+            <p class="site-description motion-element" itemprop="description">移动开发技术和个人博客</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/haohao007" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">haocc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"haocc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

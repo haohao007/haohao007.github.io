@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="动画," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="个人觉得，用户良好的视觉体验不外乎两点：心旷神怡的UI风格与惊喜温馨的动画效果。这里，学习和总结下android动画。">
+<meta name="keywords" content="动画">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Animation">
+<meta property="og:url" content="http://haocc.me/2015/05/17/animation_of_android/index.html">
+<meta property="og:site_name" content="彼时の博客">
+<meta property="og:description" content="个人觉得，用户良好的视觉体验不外乎两点：心旷神怡的UI风格与惊喜温馨的动画效果。这里，学习和总结下android动画。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2015-09-28T09:19:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Animation">
+<meta name="twitter:description" content="个人觉得，用户良好的视觉体验不外乎两点：心旷神怡的UI风格与惊喜温馨的动画效果。这里，学习和总结下android动画。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haocc.me/2015/05/17/animation_of_android/"/>
+
+
+
+
+
+  <title>Android Animation | 彼时の博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?291ffd01144d4a281f8b8611ac894df9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">彼时の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">代码如诗，诗如代码</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haocc.me/2015/05/17/animation_of_android/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haocc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="彼时の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android Animation</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-05-17T22:08:12+08:00">
+                2015-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/05/17/animation_of_android/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/05/17/animation_of_android/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  个人觉得，用户良好的视觉体验不外乎两点：心旷神怡的UI风格与惊喜温馨的动画效果。这里，学习和总结下android动画。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#传统动画</p>
+<p>##Tween 动画<br>主要有4种：渐变、平移、缩放、旋转 <br><br>文件位置: res/anim/filename.xml <br><br>资源引用：<br>Java: R.anim.filename<br>XML: @[package:]anim/filename</p>
+<p>###渐变&lt; alpha&gt;</p>
+<ul>
+<li>android:fromAlpha 动画开始透明度</li>
+<li>android:toAlpha 动画结束透明度</li>
+</ul>
+<p>Float 值。0.0 表示完全透明，1.0 表示完全不透明，</p>
+<p>###缩放&lt; scale&gt;</p>
+<ul>
+<li>android:fromXScale</li>
+<li>android:toXScale</li>
+<li>android:fromYScale</li>
+<li>android:toYScale</li>
+</ul>
+<p>Float 值，动画起始到结束时，X、Y 坐标上的伸缩尺寸。0.0 表示收缩到没有1.0 表示正常无伸缩</p>
+<ul>
+<li>android:pivotX</li>
+<li>android:pivotY</li>
+</ul>
+<p>Float值，缩放的中轴点 X/Y 坐标，可以实现动态调控件尺寸的效果。原点（0，0）表示左上角。如果想表示中轴点为图像的中心，属性值可定义成 0.5 或者 50%。</p>
+<p>###平移&lt; translate&gt;</p>
+<ul>
+<li>android:fromXDelta </li>
+<li>android:toXDelta</li>
+<li>android:fromYDelta</li>
+<li>android:toYDelta</li>
+</ul>
+<p>Float值（相对自身原始位置的像素值）或者百分比值（num%，num%p分别相对于自身或者父控件）。代表动画起始或者结束 X / Y 方向上的位置。例如，android:toYDelta=100% 表示在x方向上移动相对自己1倍的距离。</p>
+<p>###旋转&lt; rotate&gt;</p>
+<ul>
+<li>android:fromDegrees</li>
+<li>android:toDegrees</li>
+</ul>
+<p>Float值。代表代表起始和结束的角度（单位：度）</p>
+<ul>
+<li>android:pivotX </li>
+<li>android:pivotY </li>
+</ul>
+<p>Float（相对于自身左边缘的像素值）值或者百分比（num%、num%p）。代表旋转中心的X、Y坐标值。其中X轴的相对方向是Left，Y轴的相对方向是Top。</p>
+<ul>
+<li>android:fromDegrees</li>
+<li>android:toDegrees<br>Float值。代表开始和结束时的弧度位置(单位是度)</li>
+</ul>
+<p>一般调用代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ImageView image = (ImageView) findViewById(R.id.image);  </div><div class="line">Animation hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump); </div><div class="line">image.startAnimation(hyperspaceJump);</div></pre></td></tr></table></figure>
+<ul>
+<li>android:fillAfter  Boolean值。表示动画执行完后是否保持最后的状态</li>
+<li>android:duration   Int值，表示动画持续的时间，单位为毫秒。</li>
+</ul>
+<p>###动画元素容器&lt; set&gt;<br>XML布局文件必须有一个独立的根元素，可以是 &lt; alpha&gt;,&lt; scale&gt;, &lt; translate&gt;, &lt; rotate&gt;, &lt; set&gt;（持有一组其它的动画元素，甚至可以是内嵌的 &lt; set&gt;元素）中的一个。</p>
+<ul>
+<li>android:interpolator<br>应用于动画的插值器。值为一个指定了插值器资源的引用。一般是平台缺省的插值器资源或者自定义的插值器资源。</li>
+<li>android:shareInterpolator<br>Boolean值，true：代表在所有的子元素中共享同一个插值器。false则相反。</li>
+</ul>
+<p><strong>插值器interpolator</strong></p>
+<ul>
+<li>缺省插值器</li>
+<li>自定义插值器<br>（待补充）</li>
+</ul>
+<p>##Frame 动画<br>文件目录：res/drawable/filename.xml<br>资源引用：<br>Java: R.drawable.filename<br>XML: @[package:]drawable.filename</p>
+<p>###根元素<animation-list><br>包含一个或者多个子元素</animation-list></p>
+<ul>
+<li>android:oneshot<br>boolean值。true表示只执行一次动画，false表示循环执行</li>
+</ul>
+<p>###子元素&lt; item&gt;</p>
+<ul>
+<li>android:drawable<br>Drawable 资源，用于这一帧的图片。</li>
+<li>android:duration<br>Integer 类型.该帧的时长，单位为毫秒 milliseconds。</li>
+</ul>
+<p>一般调用代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">res/anim/rocket.xml:</div><div class="line">	&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  </div><div class="line">        &lt;animation-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;  </div><div class="line">            android:oneshot=&quot;false&quot;&gt;  </div><div class="line">            &lt;item android:drawable=&quot;@drawable/frame_1&quot; android:duration=&quot;200&quot; /&gt;  </div><div class="line">            &lt;item android:drawable=&quot;@drawable/frame_2&quot; android:duration=&quot;200&quot; /&gt;  </div><div class="line">            &lt;item android:drawable=&quot;@drawable/frame_3&quot; android:duration=&quot;200&quot; /&gt;  </div><div class="line">        &lt;/animation-list&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ImageView rocketImage = (ImageView) findViewById(R.id.frame_image);  </div><div class="line">rocketImage.setBackgroundResource(R.drawable.frame_image);  </div><div class="line">rocketAnimation = (AnimationDrawable) rocketImage.getBackground();  </div><div class="line">rocketAnimation.start();</div></pre></td></tr></table></figure>
+<h1 id="Property-Animations特色动画"><a href="#Property-Animations特色动画" class="headerlink" title="Property Animations特色动画"></a>Property Animations特色动画</h1><p>(待续…)</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/动画/" rel="tag"># 动画</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/16/performance_optimization/" rel="next" title="Android 性能优化">
+                <i class="fa fa-chevron-left"></i> Android 性能优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/05/20/android_view_draw/" rel="prev" title="Android View绘制">
+                Android View绘制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/05/17/animation_of_android/"
+           data-title="Android Animation" data-url="http://haocc.me/2015/05/17/animation_of_android/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png"
+              alt="haocc" />
+          
+            <p class="site-author-name" itemprop="name">haocc</p>
+            <p class="site-description motion-element" itemprop="description">移动开发技术和个人博客</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/haohao007" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Property-Animations特色动画"><span class="nav-number">1.</span> <span class="nav-text">Property Animations特色动画</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">haocc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"haocc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

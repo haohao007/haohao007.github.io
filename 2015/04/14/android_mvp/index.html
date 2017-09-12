@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="代码模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="当Android传统的MVC已无法承受因产品业务迭代导致的activity层代码冗余之重，Android MVP应时而生。最重要的是，关于MVP的一点思考。">
+<meta name="keywords" content="代码模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android MVP">
+<meta property="og:url" content="http://haocc.me/2015/04/14/android_mvp/index.html">
+<meta property="og:site_name" content="彼时の博客">
+<meta property="og:description" content="当Android传统的MVC已无法承受因产品业务迭代导致的activity层代码冗余之重，Android MVP应时而生。最重要的是，关于MVP的一点思考。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/GitBlog/gh-pages/images/structure_of_androidMVP.png">
+<meta property="og:updated_time" content="2015-08-29T12:51:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android MVP">
+<meta name="twitter:description" content="当Android传统的MVC已无法承受因产品业务迭代导致的activity层代码冗余之重，Android MVP应时而生。最重要的是，关于MVP的一点思考。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/haohao007/GitBlog/gh-pages/images/structure_of_androidMVP.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haocc.me/2015/04/14/android_mvp/"/>
+
+
+
+
+
+  <title>Android MVP | 彼时の博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?291ffd01144d4a281f8b8611ac894df9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">彼时の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">代码如诗，诗如代码</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haocc.me/2015/04/14/android_mvp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haocc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="彼时の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android MVP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-14T21:00:00+08:00">
+                2015-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/14/android_mvp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/14/android_mvp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  当Android传统的MVC已无法承受因产品业务迭代导致的activity层代码冗余之重，Android MVP应时而生。最重要的是，关于MVP的一点思考。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#什么是MVP？<br>&emsp;&emsp;MVP作为MVC的演化版本。那么类似的MVP所对应的意义：Mode-View-Presenter(模型-视图-表示器)。<a id="more"></a>而MVP与MVC最大的一点不同：M与V是不直接关联的，也是就Model与View不存在直接关系。这两者之间间隔着的是Presenter层，其负责调控View与Model之间的间接交互。MVP模式可以分离显示层和逻辑层，所以功能接口如何工作与功能的展示可以实现分离，MVP模式理想化地可以实现同一份逻辑代码搭配不同的显示界面。</p>
+<p><img src="https://raw.githubusercontent.com/haohao007/GitBlog/gh-pages/images/structure_of_androidMVP.png" alt="Android MVP" title="Android MVP结构图"></p>
+<p>##Model<br>&emsp;&emsp;对于一个结构化的APP来说，Model主要是通向主领域层或者逻辑层的通道。简单地说，只要把它看做是给View提供数据的容器就对了。</p>
+<p>##View<br>&emsp;&emsp;View通常来说是由Activity实现的（也许是Fragment，VIew，取决于app的整体结构），它会包含一个Presenter的引用，最理想的是Presenter由一个依赖注入管理器提供，比如Dagger，不过如果不用注入器的话，就需要独立创建Presenter对象了。View要做的就只是在每次有接口调用的时候（比如按钮点击后）调用Presenter的方法。</p>
+<p>##Presenter<br>&emsp;&emsp;Presenter主要作为沟通View和Model的桥梁，它从Model层检索数据后，返回给View层，但是不像典型的MVC结构，因为它也可以决定与View层的交互操作。</p>
+<p>#为什么要使用MVP？<br>&emsp;&emsp;我们知道在Android上逻辑接口和数据存取是紧耦合的，这个问题可以看看CursorAdapter这个例子，它既融合了适配器，同时也有显示的成分，而cursor很大程度上应该是数据数据存取层的。</p>
+<p>&emsp;&emsp;对于一个可扩展、稳定的应用来说，我们需要定义各个分离层。毕竟，我们不知道以后还要加入什么逻辑，是从本地数据库检索数据？还是从远程的web Service中？MVP模式可以让显示界面和数据分离，我们开发的应用可以分离至少三层，这样也可以进行独立测试。有了MVP我们就可以从Activity中分离大部分代码，而且不用单元测试可以对每个模块进行单独测试了。</p>
+<p>#怎么在Android上实现MVP？<br>&emsp;&emsp;说到这里，问题就有点复杂了。实现MVP的方式有很多种，每个人都可以根据自己的需求和自己喜欢的方式去修正MVP的实现方式，它可以随着Presenter的复杂程度变化。</p>
+<p>&emsp;&emsp;在View中需不需要控制进度条？或者是在Presenter处理？还有，谁来决定Action Bar该显示什么操作？这是一个艰难的决定。这里我会展示我自己的做法，但是我希望本文成为一个讨论如何应用MVP的地方，因为目前为止还没有实现MVP的标准方式</p>
+<p>#关于MVP的一点思考<br>&emsp;&emsp;使用Activity和Fragment作为视图层(View)真的合适么?</p>
+<p>&emsp;&emsp;目前很多使用了MVP模式的android项目，基本上都是将activity和fragment作为视图层来进行处理的。而presenters通常是通过继承自被视图层实例化或者注入的对象来得到的。确实，这种方式可以节省掉很多让人厌烦的”import android..”语句， 并且将presenters从activity的生命周期中分割出来以后， 项目后续的维护会变得简便很多。这种思路是正确的。</p>
+<p>&emsp;&emsp;但是，从另一个角度来说， activity有一个很复杂的生命周期(fragment的生命周期可能会更复杂)， 而这些生命周期很有可能对你项目的业务逻辑有非常重大的影响。 Activity 可以获取上下文环境和多种android系统服务。 Activity中发送Intent，启动Service和执行Fragment事物等。而这些特性在我看来绝不应该是视图层应该涉及的领域(视图的功能就是现实数据和从用户那里获取输入数据，在理想的情况下，视图应该避免业务逻辑)。</p>
+<p>&emsp;&emsp;基于上述的原因，我对目前的主流做法并不赞同，所以我在尝试使用Activity和Fragment作为Presenters。</p>
+<p>##使用Activity和Fragment作为presenters的步骤：</p>
+<p>&emsp;&emsp;1. 去除所有的view</p>
+<p>&emsp;&emsp;将Activity和Fragment作为presenter最大的困难就是如何将关于UI的逻辑抽取出来。我的解决方案是: 让需要作为presenter的activity 或者 fragment来继承一个抽象的类(或者叫”基类”)，这样关于View 各种组件的初始化以及逻辑，都可以在继承了抽象类的方法中进行操作，而当继承了该抽象类的class需要对某些组件进行操作的时候，只需要调用继承自抽象类的方法，就可以了。</p>
+<p>&emsp;&emsp;那么抽象类怎么获取到的view组件呢？在抽象类里面会有一个实例化的接口，这个接口里面的init()方法就会对view进行实例化，这个接口如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public interface Vu &#123;</div><div class="line">       void init(LayoutInflater inflater， ViewGroup container);</div><div class="line">       View getView();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;正如你所见，Vu定义了一个通用的初始化教程，我可以通过它来实现一个容器视图，它也有一个方法来或各一个View的实例，每一个presenter将会和它自己的Vu关联，这个presenter将会继承这个接口（直接或者间接的去继承一个来自Vu的接口）</p>
+<p>&emsp;&emsp;2. 创建一个presenter基类 (Activity)</p>
+<p>&emsp;&emsp;有了Vu接口，我们可以通过构建一系列的class来操纵很多不同的view组件，这些class 使用Vu接口来初始化View组件，并通过继承的方式给子类以操纵view组件的方法，以此来达到将ui 逻辑剥离出activity的目的。</p>
+<p>&emsp;&emsp;在下面的代码中，你可以看到，我覆写了activity的onCreate 、 onCreateView、onDestroy 、 onDestroyView，通过对这些方法的覆写，就可以对Vu的实例化和销毁进行精确的控制（vu.init()就是实例化一个view组件）。onBindVu() 和onDestoryVu()是控制view生命周期的两个方法。通过对actiivty中相关方法的覆写达到控制组件的生命周期的目的（具体看下面的代码，你就明白了）。</p>
+<p>&emsp;&emsp;这样做的好处就是无论是activity 还是 fragment， 其用与控制view组件创建和销毁的语句是一样的（尽量避免定义多余的函数）。这样的话，二者之间的切换也会减少一定的阻力（也许你今天的需求是用fragment实现的，但是第二天发现使用fragment会有一个惊天bug，译者本人就遇到过）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">public abstract class BasePresenterActivity&lt;V extends Vu&gt; extends Activity &#123;</div><div class="line"></div><div class="line">       protected V vu;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       protected final void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">           super.onCreate(savedInstanceState);</div><div class="line">           try &#123;</div><div class="line">               vu = getVuClass().newInstance();</div><div class="line">               vu.init(getLayoutInflater()， null);</div><div class="line">               setContentView(vu.getView());</div><div class="line">               onBindVu();</div><div class="line">           &#125; catch (InstantiationException e) &#123;</div><div class="line">               e.printStackTrace();</div><div class="line">           &#125; catch (IllegalAccessException e) &#123;</div><div class="line">               e.printStackTrace();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       protected final void onDestroy() &#123;</div><div class="line">           onDestroyVu();</div><div class="line">           vu = null;</div><div class="line">           super.onDestroy();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       protected abstract Class&lt;V&gt; getVuClass();</div><div class="line"></div><div class="line">       protected void onBindVu()&#123;&#125;;</div><div class="line"></div><div class="line">       protected void onDestroyVu() &#123;&#125;;</div><div class="line"></div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;3. 创建一个基本的presenter(Fragment)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public abstract class BasePresenterFragment&lt;V extends Vu&gt; extends Fragment &#123;</div><div class="line"></div><div class="line">    protected V vu;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public final View onCreateView(LayoutInflater inflater， ViewGroup container， Bundle savedInstanceState) &#123;</div><div class="line">        View view = null;</div><div class="line">        try &#123;</div><div class="line">            vu = getVuClass().newInstance();</div><div class="line">            vu.init(inflater， container);</div><div class="line">            onBindVu();</div><div class="line">            view = vu.getView();</div><div class="line">        &#125; catch (java.lang.InstantiationException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (IllegalAccessException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        return view;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public final void onDestroyView() &#123;</div><div class="line">        onDestroyVu();</div><div class="line">        vu = null;</div><div class="line">        super.onDestroyView();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected void onDestroyVu() &#123;&#125;;</div><div class="line"></div><div class="line">    protected void onBindVu()&#123;&#125;;</div><div class="line"></div><div class="line">    protected abstract Class&lt;V&gt; getVuClass();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>##一个简单的例子<br>&emsp;&emsp;如前文所述，我们已经确定了一个框架，现在就来写一个简单的例子来进一步的说明。 为了避免篇幅过长，我就写一个“hello world”的例子。</p>
+<p>&emsp;&emsp;1. 首先要有一个实现Vu接口的类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class HelloVu implements Vu &#123;</div><div class="line"></div><div class="line">View view;</div><div class="line">TextView helloView;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void init(LayoutInflater inflater， ViewGroup container) &#123;</div><div class="line">    view = inflater.inflate(R.layout.hello， container， false);</div><div class="line">    helloView = (TextView) view.findViewById(R.id.hello);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">public View getView() &#123;</div><div class="line">    return view;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public void setHelloMessage(String msg)&#123;</div><div class="line">    helloView.setText(msg);</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;2. 创建一个presenter来操作这个TextView</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class HelloActivity extends BasePresenterActivity &#123;</div><div class="line">@Override</div><div class="line">protected void onBindVu() &#123;</div><div class="line">    vu.setHelloMessage(&quot;Hello World!&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">protected Class&lt;MainVu&gt; getVuClass() &#123;</div><div class="line">    return HelloVu.class;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;OK，这样就大功告成了！！是不是很简便！</p>
+<p>&emsp;&emsp;等等。。。耦合警告!</p>
+<p>&emsp;&emsp;你可能注意到我的HelloVu类直接实现了Vu接口，我的Presenter的getVuClass方法直接引用了实现类。传统的MVP模式中，Presenter是要通过接口与他们的View解耦合的。因此，你也可以这么做。避免直接实现Vu接口，我们可以创建一个扩展了Vu的IHelloView接口，然后使用这个接口作为Presenter的泛型类型。这样Presenter看起来应该是如下这样的 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class HelloActivity extends BasePresenterActivity&lt;IHelloVu&gt; &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onBindVu() &#123;</div><div class="line">        vu.setHelloMessage(&quot;Hello World!&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected Class&lt;MainVu&gt; getVuClass() &#123;</div><div class="line">        return HelloVuImpl.class;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在我使用强大的模拟工具过程中，我个人并没有看到在一个接口下面实现Vu所带来的好处。但是对于我来说一个号的方面是，有没有Vu接口它都能够工作，唯一的需求就是最终你会实现Vu。</p>
+<p>&emsp;&emsp;3. 如何进行测试</p>
+<p>&emsp;&emsp;通过以上几步，我们可以发现，去除了UI逻辑之后，Activity变得非常简洁。并且，相关的测试 也变的非常异常的简单。请看如下的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class HelloActivityTest &#123;</div><div class="line">    HelloActivity activity;</div><div class="line">    HelloVu vu;</div><div class="line"></div><div class="line">    @Before</div><div class="line">    public void setup() throws Exception &#123;</div><div class="line">        activity = new HelloActivity();</div><div class="line">        vu = Mockito.mock(HelloVu.class);</div><div class="line">        activity.vu = vu;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Test</div><div class="line">    public void testOnBindVu()&#123;</div><div class="line">        activity.onBindVu();</div><div class="line">        verify(vu).setHelloMessage(&quot;Hello World!&quot;);</div><div class="line">    &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;以上代码是一段标准的jnuit单元测试的代码，不需要在android设备中部署运行，只需要在编译环境中即可测试。大幅度的提高了测试效率。但是，在测试某些方法的时候，你必须要使用android设备，例如当你想测试activity生命周期中的resume()方法。在缺乏设备环境的时候，super。resume()会报错。为了解决这个问题，可以借鉴一些工具，例如Robolectric、还有android gradle 1。1 插件中内置的testOptions { unitTests。returnDefaultValues = true }。此外，你仍然可以将这些生命周期也抽离出来。例如如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected final void onResume() &#123;</div><div class="line">    super.onResume();</div><div class="line">    afterResume();</div><div class="line">&#125;</div><div class="line">protected void afterResume()&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;现在，你可以在没有android设备的情况下，快速的测试了！<br>意外收获：使用adapter作为presenter<br>将Activity作为presente已经足够狡猾了吧？使用adapter作为presenter，你想过没有？ 好吧，请看如下的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public abstract class BasePresenterAdapter extends BaseAdapter &#123;</div><div class="line">protected V vu;</div><div class="line"></div><div class="line">@Override</div><div class="line">public final View getView(int position， View convertView， ViewGroup parent) &#123;</div><div class="line">    if(convertView == null) &#123;</div><div class="line">        LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);</div><div class="line">        try &#123;</div><div class="line">            vu = (V) getVuClass().newInstance();</div><div class="line">            vu.init(inflater， parent);</div><div class="line">            convertView = vu.getView();</div><div class="line">            convertView.setTag(vu);</div><div class="line">        &#125; catch (InstantiationException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (IllegalAccessException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">        vu = (V) convertView.getTag();</div><div class="line">    &#125;</div><div class="line">    if(convertView!=null) &#123;</div><div class="line">        onBindListItemVu(position);</div><div class="line">    &#125;</div><div class="line">    return convertView;</div><div class="line">&#125;</div><div class="line"></div><div class="line">protected abstract void onBindListItemVu(int position);</div><div class="line"></div><div class="line">protected abstract Class&lt;V&gt; getVuClass();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;如上代码，使用adapter作为presenter其实和activity或者fragement几乎是一样的，只有一点明显的区别就是，我把onbingVu替换成了onBindListItemVu（接受int参数），其实我是借鉴了holderview模式。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/代码模式/" rel="tag"># 代码模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/12/interview_2015_first/" rel="next" title="初试">
+                <i class="fa fa-chevron-left"></i> 初试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/16/performance_optimization/" rel="prev" title="Android 性能优化">
+                Android 性能优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/04/14/android_mvp/"
+           data-title="Android MVP" data-url="http://haocc.me/2015/04/14/android_mvp/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png"
+              alt="haocc" />
+          
+            <p class="site-author-name" itemprop="name">haocc</p>
+            <p class="site-description motion-element" itemprop="description">移动开发技术和个人博客</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/haohao007" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">haocc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"haocc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
