@@ -103,12 +103,10 @@
 <meta property="og:site_name" content="橘子风车の博客">
 <meta property="og:description" content="当Android传统的MVC已无法承受因产品业务迭代导致的activity层代码冗余之重，Android MVP应时而生。最重要的是，关于MVP的一点思考。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/GitBlog/gh-pages/images/structure_of_androidMVP.png">
-<meta property="og:updated_time" content="2015-08-29T12:51:12.000Z">
+<meta property="og:updated_time" content="2017-09-13T07:20:31.947Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android MVP">
 <meta name="twitter:description" content="当Android传统的MVC已无法承受因产品业务迭代导致的activity层代码冗余之重，Android MVP应时而生。最重要的是，关于MVP的一点思考。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/haohao007/GitBlog/gh-pages/images/structure_of_androidMVP.png">
 
 
 
@@ -394,21 +392,19 @@
       
 
       
-        <p>#什么是MVP？<br>&emsp;&emsp;MVP作为MVC的演化版本。那么类似的MVP所对应的意义：Mode-View-Presenter(模型-视图-表示器)。<a id="more"></a>而MVP与MVC最大的一点不同：M与V是不直接关联的，也是就Model与View不存在直接关系。这两者之间间隔着的是Presenter层，其负责调控View与Model之间的间接交互。MVP模式可以分离显示层和逻辑层，所以功能接口如何工作与功能的展示可以实现分离，MVP模式理想化地可以实现同一份逻辑代码搭配不同的显示界面。</p>
-<p><img src="https://raw.githubusercontent.com/haohao007/GitBlog/gh-pages/images/structure_of_androidMVP.png" alt="Android MVP" title="Android MVP结构图"></p>
-<p>##Model<br>&emsp;&emsp;对于一个结构化的APP来说，Model主要是通向主领域层或者逻辑层的通道。简单地说，只要把它看做是给View提供数据的容器就对了。</p>
-<p>##View<br>&emsp;&emsp;View通常来说是由Activity实现的（也许是Fragment，VIew，取决于app的整体结构），它会包含一个Presenter的引用，最理想的是Presenter由一个依赖注入管理器提供，比如Dagger，不过如果不用注入器的话，就需要独立创建Presenter对象了。View要做的就只是在每次有接口调用的时候（比如按钮点击后）调用Presenter的方法。</p>
-<p>##Presenter<br>&emsp;&emsp;Presenter主要作为沟通View和Model的桥梁，它从Model层检索数据后，返回给View层，但是不像典型的MVC结构，因为它也可以决定与View层的交互操作。</p>
-<p>#为什么要使用MVP？<br>&emsp;&emsp;我们知道在Android上逻辑接口和数据存取是紧耦合的，这个问题可以看看CursorAdapter这个例子，它既融合了适配器，同时也有显示的成分，而cursor很大程度上应该是数据数据存取层的。</p>
+        <h1 id="什么是MVP？"><a href="#什么是MVP？" class="headerlink" title="什么是MVP？"></a>什么是MVP？</h1><p>&emsp;&emsp;MVP作为MVC的演化版本。那么类似的MVP所对应的意义：Mode-View-Presenter(模型-视图-表示器)。<a id="more"></a>而MVP与MVC最大的一点不同：M与V是不直接关联的，也是就Model与View不存在直接关系。这两者之间间隔着的是Presenter层，其负责调控View与Model之间的间接交互。MVP模式可以分离显示层和逻辑层，所以功能接口如何工作与功能的展示可以实现分离，MVP模式理想化地可以实现同一份逻辑代码搭配不同的显示界面。</p>
+<h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><p>&emsp;&emsp;对于一个结构化的APP来说，Model主要是通向主领域层或者逻辑层的通道。简单地说，只要把它看做是给View提供数据的容器就对了。</p>
+<h2 id="View"><a href="#View" class="headerlink" title="View"></a>View</h2><p>&emsp;&emsp;View通常来说是由Activity实现的（也许是Fragment，VIew，取决于app的整体结构），它会包含一个Presenter的引用，最理想的是Presenter由一个依赖注入管理器提供，比如Dagger，不过如果不用注入器的话，就需要独立创建Presenter对象了。View要做的就只是在每次有接口调用的时候（比如按钮点击后）调用Presenter的方法。</p>
+<h2 id="Presenter"><a href="#Presenter" class="headerlink" title="Presenter"></a>Presenter</h2><p>&emsp;&emsp;Presenter主要作为沟通View和Model的桥梁，它从Model层检索数据后，返回给View层，但是不像典型的MVC结构，因为它也可以决定与View层的交互操作。</p>
+<h1 id="为什么要使用MVP？"><a href="#为什么要使用MVP？" class="headerlink" title="为什么要使用MVP？"></a>为什么要使用MVP？</h1><p>&emsp;&emsp;我们知道在Android上逻辑接口和数据存取是紧耦合的，这个问题可以看看CursorAdapter这个例子，它既融合了适配器，同时也有显示的成分，而cursor很大程度上应该是数据数据存取层的。</p>
 <p>&emsp;&emsp;对于一个可扩展、稳定的应用来说，我们需要定义各个分离层。毕竟，我们不知道以后还要加入什么逻辑，是从本地数据库检索数据？还是从远程的web Service中？MVP模式可以让显示界面和数据分离，我们开发的应用可以分离至少三层，这样也可以进行独立测试。有了MVP我们就可以从Activity中分离大部分代码，而且不用单元测试可以对每个模块进行单独测试了。</p>
-<p>#怎么在Android上实现MVP？<br>&emsp;&emsp;说到这里，问题就有点复杂了。实现MVP的方式有很多种，每个人都可以根据自己的需求和自己喜欢的方式去修正MVP的实现方式，它可以随着Presenter的复杂程度变化。</p>
+<h1 id="怎么在Android上实现MVP？"><a href="#怎么在Android上实现MVP？" class="headerlink" title="怎么在Android上实现MVP？"></a>怎么在Android上实现MVP？</h1><p>&emsp;&emsp;说到这里，问题就有点复杂了。实现MVP的方式有很多种，每个人都可以根据自己的需求和自己喜欢的方式去修正MVP的实现方式，它可以随着Presenter的复杂程度变化。</p>
 <p>&emsp;&emsp;在View中需不需要控制进度条？或者是在Presenter处理？还有，谁来决定Action Bar该显示什么操作？这是一个艰难的决定。这里我会展示我自己的做法，但是我希望本文成为一个讨论如何应用MVP的地方，因为目前为止还没有实现MVP的标准方式</p>
-<p>#关于MVP的一点思考<br>&emsp;&emsp;使用Activity和Fragment作为视图层(View)真的合适么?</p>
+<h1 id="关于MVP的一点思考"><a href="#关于MVP的一点思考" class="headerlink" title="关于MVP的一点思考"></a>关于MVP的一点思考</h1><p>&emsp;&emsp;使用Activity和Fragment作为视图层(View)真的合适么?</p>
 <p>&emsp;&emsp;目前很多使用了MVP模式的android项目，基本上都是将activity和fragment作为视图层来进行处理的。而presenters通常是通过继承自被视图层实例化或者注入的对象来得到的。确实，这种方式可以节省掉很多让人厌烦的”import android..”语句， 并且将presenters从activity的生命周期中分割出来以后， 项目后续的维护会变得简便很多。这种思路是正确的。</p>
 <p>&emsp;&emsp;但是，从另一个角度来说， activity有一个很复杂的生命周期(fragment的生命周期可能会更复杂)， 而这些生命周期很有可能对你项目的业务逻辑有非常重大的影响。 Activity 可以获取上下文环境和多种android系统服务。 Activity中发送Intent，启动Service和执行Fragment事物等。而这些特性在我看来绝不应该是视图层应该涉及的领域(视图的功能就是现实数据和从用户那里获取输入数据，在理想的情况下，视图应该避免业务逻辑)。</p>
 <p>&emsp;&emsp;基于上述的原因，我对目前的主流做法并不赞同，所以我在尝试使用Activity和Fragment作为Presenters。</p>
-<p>##使用Activity和Fragment作为presenters的步骤：</p>
-<p>&emsp;&emsp;1. 去除所有的view</p>
+<h2 id="使用Activity和Fragment作为presenters的步骤："><a href="#使用Activity和Fragment作为presenters的步骤：" class="headerlink" title="使用Activity和Fragment作为presenters的步骤："></a>使用Activity和Fragment作为presenters的步骤：</h2><p>&emsp;&emsp;1. 去除所有的view</p>
 <p>&emsp;&emsp;将Activity和Fragment作为presenter最大的困难就是如何将关于UI的逻辑抽取出来。我的解决方案是: 让需要作为presenter的activity 或者 fragment来继承一个抽象的类(或者叫”基类”)，这样关于View 各种组件的初始化以及逻辑，都可以在继承了抽象类的方法中进行操作，而当继承了该抽象类的class需要对某些组件进行操作的时候，只需要调用继承自抽象类的方法，就可以了。</p>
 <p>&emsp;&emsp;那么抽象类怎么获取到的view组件呢？在抽象类里面会有一个实例化的接口，这个接口里面的init()方法就会对view进行实例化，这个接口如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public interface Vu &#123;</div><div class="line">       void init(LayoutInflater inflater， ViewGroup container);</div><div class="line">       View getView();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -420,7 +416,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">public abstract class BasePresenterActivity&lt;V extends Vu&gt; extends Activity &#123;</div><div class="line"></div><div class="line">       protected V vu;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       protected final void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">           super.onCreate(savedInstanceState);</div><div class="line">           try &#123;</div><div class="line">               vu = getVuClass().newInstance();</div><div class="line">               vu.init(getLayoutInflater()， null);</div><div class="line">               setContentView(vu.getView());</div><div class="line">               onBindVu();</div><div class="line">           &#125; catch (InstantiationException e) &#123;</div><div class="line">               e.printStackTrace();</div><div class="line">           &#125; catch (IllegalAccessException e) &#123;</div><div class="line">               e.printStackTrace();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       protected final void onDestroy() &#123;</div><div class="line">           onDestroyVu();</div><div class="line">           vu = null;</div><div class="line">           super.onDestroy();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       protected abstract Class&lt;V&gt; getVuClass();</div><div class="line"></div><div class="line">       protected void onBindVu()&#123;&#125;;</div><div class="line"></div><div class="line">       protected void onDestroyVu() &#123;&#125;;</div><div class="line"></div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;3. 创建一个基本的presenter(Fragment)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public abstract class BasePresenterFragment&lt;V extends Vu&gt; extends Fragment &#123;</div><div class="line"></div><div class="line">    protected V vu;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public final View onCreateView(LayoutInflater inflater， ViewGroup container， Bundle savedInstanceState) &#123;</div><div class="line">        View view = null;</div><div class="line">        try &#123;</div><div class="line">            vu = getVuClass().newInstance();</div><div class="line">            vu.init(inflater， container);</div><div class="line">            onBindVu();</div><div class="line">            view = vu.getView();</div><div class="line">        &#125; catch (java.lang.InstantiationException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (IllegalAccessException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        return view;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public final void onDestroyView() &#123;</div><div class="line">        onDestroyVu();</div><div class="line">        vu = null;</div><div class="line">        super.onDestroyView();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected void onDestroyVu() &#123;&#125;;</div><div class="line"></div><div class="line">    protected void onBindVu()&#123;&#125;;</div><div class="line"></div><div class="line">    protected abstract Class&lt;V&gt; getVuClass();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>##一个简单的例子<br>&emsp;&emsp;如前文所述，我们已经确定了一个框架，现在就来写一个简单的例子来进一步的说明。 为了避免篇幅过长，我就写一个“hello world”的例子。</p>
+<h2 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h2><p>&emsp;&emsp;如前文所述，我们已经确定了一个框架，现在就来写一个简单的例子来进一步的说明。 为了避免篇幅过长，我就写一个“hello world”的例子。</p>
 <p>&emsp;&emsp;1. 首先要有一个实现Vu接口的类：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class HelloVu implements Vu &#123;</div><div class="line"></div><div class="line">View view;</div><div class="line">TextView helloView;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void init(LayoutInflater inflater， ViewGroup container) &#123;</div><div class="line">    view = inflater.inflate(R.layout.hello， container， false);</div><div class="line">    helloView = (TextView) view.findViewById(R.id.hello);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">public View getView() &#123;</div><div class="line">    return view;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public void setHelloMessage(String msg)&#123;</div><div class="line">    helloView.setText(msg);</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;2. 创建一个presenter来操作这个TextView</p>
@@ -536,8 +532,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <img class="site-author-image" itemprop="image"
@@ -555,7 +560,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -577,7 +582,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -610,6 +615,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是MVP？"><span class="nav-number">1.</span> <span class="nav-text">什么是MVP？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model"><span class="nav-number">1.1.</span> <span class="nav-text">Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View"><span class="nav-number">1.2.</span> <span class="nav-text">View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Presenter"><span class="nav-number">1.3.</span> <span class="nav-text">Presenter</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要使用MVP？"><span class="nav-number">2.</span> <span class="nav-text">为什么要使用MVP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#怎么在Android上实现MVP？"><span class="nav-number">3.</span> <span class="nav-text">怎么在Android上实现MVP？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于MVP的一点思考"><span class="nav-number">4.</span> <span class="nav-text">关于MVP的一点思考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Activity和Fragment作为presenters的步骤："><span class="nav-number">4.1.</span> <span class="nav-text">使用Activity和Fragment作为presenters的步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单的例子"><span class="nav-number">4.2.</span> <span class="nav-text">一个简单的例子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

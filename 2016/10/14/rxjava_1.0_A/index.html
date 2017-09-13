@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="框架源码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。当然，对于框架学问来说，尤其是RxJava的模式思想，这只是第一弹。">
+<meta name="keywords" content="框架源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava源码的正确打开方式 一">
+<meta property="og:url" content="http://haocc.me/2016/10/14/rxjava_1.0_A/index.html">
+<meta property="og:site_name" content="橘子风车の博客">
+<meta property="og:description" content="在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。当然，对于框架学问来说，尤其是RxJava的模式思想，这只是第一弹。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_03.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_04.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_advanced_01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_advanced_02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_advanced_03.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_03.png">
+<meta property="og:updated_time" content="2017-09-13T07:17:46.314Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava源码的正确打开方式 一">
+<meta name="twitter:description" content="在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。当然，对于框架学问来说，尤其是RxJava的模式思想，这只是第一弹。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haocc.me/2016/10/14/rxjava_1.0_A/"/>
+
+
+
+
+
+  <title>RxJava源码的正确打开方式 一 | 橘子风车の博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?291ffd01144d4a281f8b8611ac894df9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">橘子风车の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">代码如诗，诗如代码</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haocc.me/2016/10/14/rxjava_1.0_A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haocc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="橘子风车の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RxJava源码的正确打开方式 一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-14T21:00:00+08:00">
+                2016-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/14/rxjava_1.0_A/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/14/rxjava_1.0_A/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。当然，对于框架学问来说，尤其是RxJava的模式思想，这只是第一弹。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="响应式编程思维"><a href="#响应式编程思维" class="headerlink" title="响应式编程思维"></a>响应式编程思维</h1><h2 id="What"><a href="#What" class="headerlink" title="What"></a>What</h2><p>本质上就是使用异步数据流（streams）进行编程。在此基础上，可以对这些数据流进行创建、转换、过滤、映射等操作。可参考stackoverflow上的一个回答：<a href="https://stackoverflow.com/questions/1028250/what-is-functional-reactive-programming" target="_blank" rel="external">What is (functional) reactive programming?</a></p>
+<blockquote>
+<p>RxJava is a Java VM implementation of Reactive Extensions: a library for composing asynchronous and event-based programs by using observable sequences.</p>
+</blockquote>
+<p>官方定义：RxJava是Reactive Extensions的Java VM实现：用于通过使用observable序列来组合异步和基于事件的程序的库。<br>所以 observable 可认为是 streams的实现。</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><ul>
+<li>清晰的业务流程<br>只需要关注业务逻辑相互依赖的事件，及数据流。不需要关心具体实现。</li>
+<li>便于业务的维护和扩展<br>不需要改变原有数据流内部，采用增删中间逻辑处理单元(数据流)来组合的方式即可。</li>
+<li>便于调试和测试<br>中间逻辑处理单元的细化，可帮助快速定位有利于调试<br>Mock业务流程数据流的逻辑，即可进行测试</li>
+<li>代码简洁易读，无缩进<br>建议使用方法细化的方式，尽量少采取内部类内部方法的方式实现数据流</li>
+</ul>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>一个双击事件流可简洁表示如下<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_01.png" alt="双击事件流demo"></p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="Action、Function"><a href="#Action、Function" class="headerlink" title="Action、Function"></a>Action、Function</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public interface Action1&lt;T&gt; extends Action &#123;</div><div class="line">    void call(T t);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public interface Func1&lt;T, R&gt; extends Function &#123;</div><div class="line">    R call(T t);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_01.png" alt="Action与Function"><br>可以这么理解：<br>Action：用于事件，即某个数据流的动作<br>Function：用于数据流，可做中间处理环节<br>本质都是 call()接口回调方法<br>区别在于，Function是有返回值的，而Action没有</p>
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>可观察的对象（被观察者），本质上是数据流(stream)，可发射基于时间排序的事件序列。<br>重要属性： OnSubscribe<t> onSubscribe<br>本质定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface OnSubscribe&lt;T&gt; extends Action1&lt;Subscriber&lt;? super T&gt;&gt; &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></t></p>
+<p>实际作用：call方法里进行事件的发射</p>
+<h2 id="Subscriber"><a href="#Subscriber" class="headerlink" title="Subscriber"></a>Subscriber</h2><p>订阅者(观察的对象)，本质上是提供数据流的回调,与数据流的关联。<br>回调生命周期：</p>
+<ol>
+<li>onNext -&gt; … -&gt; onNext -&gt; onCompleted</li>
+<li>onNext -&gt; … -&gt; onNext -&gt; onError</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_02.png" alt="Observable与Subscriber"></p>
+<h3 id="Subscription"><a href="#Subscription" class="headerlink" title="Subscription"></a>Subscription</h3><p>Observable 与Subscriber 的关联<br>subscription= observable.subscribe(subscriber)<br>tip：可用于终止数据流发射事件序列，一般在程序生命周期内调用subscriber.unsubscribe()可避免内存泄露</p>
+<h3 id="Producer-backpressure"><a href="#Producer-backpressure" class="headerlink" title="Producer　(backpressure)"></a>Producer　(backpressure)</h3><p>可以这么理解：允许subscriber向上流Observable要求发射一定数量item的请求通道，即控件上流的输入和下流的输出<br>一般实现会extends AtomicLong,本身就是计数器。且内部有两个方法：request(long),produce(long)</p>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_03.png" alt="Observable与Subscriber"></p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><h3 id="一般代码"><a href="#一般代码" class="headerlink" title="一般代码"></a>一般代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Observable.create(new Observable.OnSubscribe&lt;Object&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void call(Subscriber&lt;? super Object&gt; subscriber) &#123;</div><div class="line">	                  ...</div><div class="line">                    subscriber.onNext(new Object);</div><div class="line">            &#125;</div><div class="line">        &#125;).subscribe(new Subscriber&lt;Object&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void onCompleted() &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">            @Override</div><div class="line">            public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">            @Override</div><div class="line">            public void onNext(Object o) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<h3 id="主要源码"><a href="#主要源码" class="headerlink" title="主要源码"></a>主要源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public static &lt;T&gt; Observable&lt;T&gt; create(OnSubscribe&lt;T&gt; f) &#123;</div><div class="line">        return new Observable&lt;T&gt;(hook.onCreate(f));</div><div class="line">&#125;</div><div class="line"></div><div class="line">Observable(OnSubscribe&lt;T&gt; f) &#123;</div><div class="line">        this.onSubscribe = f;</div><div class="line">&#125;</div><div class="line"></div><div class="line">static &lt;T&gt; Subscription subscribe(Subscriber&lt;? super T&gt; subscriber, Observable&lt;T&gt; observable) &#123;</div><div class="line">        ...</div><div class="line">        subscriber.onStart()</div><div class="line">        try &#123;</div><div class="line">            hook.onSubscribeStart(observable, observable.onSubscribe).call(subscriber);</div><div class="line">            return hook.onSubscribeReturn(subscriber);</div><div class="line">        &#125;catch (Throwable e) &#123;</div><div class="line">            ...</div><div class="line">            return Subscriptions.unsubscribed();</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_concept_04.png" alt="基本原理"><br>observable.onSubscribe.call(subscriber)  –&gt; Subscription</p>
+<h1 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h1><h2 id="Operator"><a href="#Operator" class="headerlink" title="Operator"></a>Operator</h2><p>源码定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public interface Operator&lt;R, T&gt; extends Func1&lt;Subscriber&lt;? super R&gt;, Subscriber&lt;? super T&gt;&gt; &#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>What?!!<br>参数是Subscriber，返回结果也是Subscriber？<br>而且泛型定义Operator<r, t="">是不是搞错了？<br>不应该是Operator<t, r="">么？</t,></r,></p>
+<p>其实呢，暂时可以这么简单地理解：操作符就是数据流方向中间处理单元，这个处理操作本身会降级（Observable -&gt;Subscription），源码内部会做升级（Subscription -&gt; Observable）,所以从源码定义来看，操作符可以看做是上下流的订阅者。</p>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_advanced_01.png" alt="Lift原理"></p>
+<h3 id="一般代码-1"><a href="#一般代码-1" class="headerlink" title="一般代码"></a>一般代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Observable.just(&quot;&quot;)</div><div class="line">                .map(new Func1&lt;String, String&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public String call(String s) &#123;</div><div class="line">	                      ...</div><div class="line">                        return &quot;hello&quot;;</div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line">                .subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">                    @Override</div><div class="line">                    public void onCompleted() &#123;&#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onError(Throwable e) &#123;&#125;</div><div class="line"></div><div class="line">                    @Override</div><div class="line">                    public void onNext(String s) &#123;&#125;</div><div class="line"></div><div class="line">                &#125;);</div></pre></td></tr></table></figure>
+<h3 id="主要源码分析"><a href="#主要源码分析" class="headerlink" title="主要源码分析"></a>主要源码分析</h3><h4 id="OnSubscribeLift"><a href="#OnSubscribeLift" class="headerlink" title="OnSubscribeLift"></a>OnSubscribeLift</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">源码定义</div><div class="line">OnSubscribeLift&lt;T, R&gt; implements OnSubscribe&lt;R&gt;</div><div class="line"></div><div class="line">构造方法</div><div class="line">public OnSubscribeLift(OnSubscribe&lt;T&gt; parent, Operator&lt;? extends R, ? super T&gt; operator) &#123;</div><div class="line">        this.parent = parent;</div><div class="line">        this.operator = operator;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Call方法</div><div class="line">public void call(Subscriber&lt;? super R&gt; o) &#123;</div><div class="line">        try &#123;</div><div class="line">            Subscriber&lt;? super T&gt; st = hook.onLift(operator).call(o);</div><div class="line">            try &#123;</div><div class="line">                st.onStart();</div><div class="line">                parent.call(st);</div><div class="line">            &#125; catch (Throwable e) &#123;st.onError(e);&#125;</div><div class="line">        &#125; catch (Throwable e) &#123;o.onError(e);&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="OperatorMap"><a href="#OperatorMap" class="headerlink" title="OperatorMap"></a>OperatorMap</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">构造方法</div><div class="line">public OperatorMap(Func1&lt;? super T, ? extends R&gt; transformer) &#123;this.transformer = transformer;&#125;</div><div class="line"></div><div class="line">Call方法</div><div class="line">public Subscriber&lt;? super T&gt; call(final Subscriber&lt;? super R&gt; o) &#123;</div><div class="line">        MapSubscriber&lt;T, R&gt; parent = new MapSubscriber&lt;T, R&gt;(o, transformer);</div><div class="line">        o.add(parent);return parent;</div><div class="line">&#125;</div><div class="line"></div><div class="line">内部封装的Subscriber</div><div class="line">static final class MapSubscriber&lt;T, R&gt; extends Subscriber&lt;T&gt; &#123;</div><div class="line">        public MapSubscriber(Subscriber&lt;? super R&gt; actual, Func1&lt;? super T, ? extends R&gt; mapper) &#123;</div><div class="line">            this.actual = actual;this.mapper = mapper;</div><div class="line">        &#125;</div><div class="line">        public void onNext(T t) &#123;</div><div class="line">            R result;</div><div class="line">            try &#123;</div><div class="line">	              result = mapper.call(t);</div><div class="line">            &#125; catch (Throwable ex) &#123;&#125;</div><div class="line">            actual.onNext(result);</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_advanced_02.png" alt="Map原理"><br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_advanced_03.png" alt="Map原理图解"></p>
+<h1 id="一个Demo"><a href="#一个Demo" class="headerlink" title="一个Demo"></a>一个Demo</h1><h2 id="业务需求如下："><a href="#业务需求如下：" class="headerlink" title="业务需求如下："></a>业务需求如下：</h2><ol>
+<li>用户输入</li>
+<li>校验输入</li>
+<li>数据库获取Token</li>
+<li>校验Token<br>4.1 若Token过期<br>4.1.1 数据库获取用户名和密码<br>4.1.2 数据库缓存成功获取的Token<br>4.2 若Token有效，用户输入和Token作为参数，请求获取列表的Api</li>
+<li>过滤(洗数据)<br>5.1 数据库缓存App需要的list</li>
+<li>数据转换</li>
+<li>视图展示</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_02.png" alt="demo流程图"><br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_A/rxjava_1.0_A_demo_03.png" alt="demo图解"></p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line">    public void execute(Subscriber subscriber, Scheduler onObserve) &#123;</div><div class="line">            // 1.输入参数校验</div><div class="line">            verify()</div><div class="line">            .subscribeOn(Schedulers.newThread())</div><div class="line">            //2.数据库获取Token</div><div class="line">            .doOnNext(requestValue -&gt; requestValue.setToken(tokenRepository.getCurrentVailToken()))</div><div class="line">            //3 分支</div><div class="line">            .flatMap(requestValue1 -&gt; &#123;</div><div class="line">                //3.1 Token无效，进入请求Token的分支</div><div class="line">                if (requestValue1.getToken().getTag() == TokenRepository.EMPTY) &#123;</div><div class="line">                    UserEntity user = userRepository.getCurrent();</div><div class="line">                    return requestToken(user.getPhone(), user.getPassword());</div><div class="line">                &#125;</div><div class="line">                //3.2 Token有效，跳过此环节</div><div class="line">                return Observable.just(requestValue1);</div><div class="line">            &#125;)</div><div class="line"></div><div class="line">            // 根据用户输入和有效的Token请求获取内容的Api</div><div class="line">            .flatMap(requestValue1 -&gt; requestDemo(requestValue1.getToken().getSequence(), requestValue1.getSelection()))</div><div class="line">            // 数据库缓存</div><div class="line">            .doOnNext(demo -&gt; demoRepository.put(DemoMapper.toDemoEntity(demo)))</div><div class="line">            // 逐条过滤无图片的内容</div><div class="line">            .filter(demo -&gt; !&quot;&quot;.equals(demo.getPictureUrl()))</div><div class="line">            .observeOn(onObserve)</div><div class="line">            .subscribe(subscriber);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">  public Observable&lt;DemoRequestValue&gt; verify() &#123;</div><div class="line">    return Observable.create(new Observable.OnSubscribe&lt;DemoRequestValue&gt;() &#123;</div><div class="line">        @Override</div><div class="line">        public void call(Subscriber&lt;? super DemoRequestValue&gt; subscriber) &#123;</div><div class="line">            String errorMsg = isParameterValid(requestValue.getSelection());</div><div class="line">            if (&quot;&quot;.equals(errorMsg)) &#123;</div><div class="line">                subscriber.onNext(requestValue);</div><div class="line">            &#125; else &#123;</div><div class="line">                subscriber.onError(new IllegalArgumentException(errorMsg));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public String isParameterValid(String parameter) &#123;</div><div class="line">    if (&quot;&quot;.equals(parameter)) &#123;</div><div class="line">        return &quot;不能为空&quot;;</div><div class="line">    &#125;</div><div class="line">    return &quot;&quot;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public Observable&lt;Demo&gt; requestDemo(String token,String selection) &#123;</div><div class="line">            //Api获取Demo列表</div><div class="line">    return getApi().getDemos(token,selection)</div><div class="line">            .subscribeOn(Schedulers.newThread())</div><div class="line">            //解析返回结果</div><div class="line">            .filter(demoResponse -&gt; &#123;</div><div class="line">                if (demoResponse.getCode() == 0) &#123;</div><div class="line">                    throw new RuntimeException(demoResponse.getMsg());</div><div class="line">                &#125;</div><div class="line">                return true;</div><div class="line">                &#125;)</div><div class="line">            // 逐条发射</div><div class="line">            .flatMap(demoResponse -&gt; Observable.from(demoResponse.getData()));</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public Observable&lt;DemoRequestValue&gt; requestToken(String phone,String password) &#123;</div><div class="line">            // Api获取Token</div><div class="line">    return getApi().getToken(phone,password)</div><div class="line">            .subscribeOn(Schedulers.newThread())</div><div class="line">            //解析返回结果</div><div class="line">            .filter(tokenResponse -&gt; &#123;</div><div class="line">                if (tokenResponse.getCode() == 0) &#123;</div><div class="line">                    throw new RuntimeException(tokenResponse.getMsg());</div><div class="line">                &#125;</div><div class="line">                return true;</div><div class="line">            &#125;)</div><div class="line">            //数据库缓存</div><div class="line">            .doOnNext(tokenResponse -&gt; tokenRepository.put(TokenMapper.toTokenEntity(tokenResponse.getData().get(0))))</div><div class="line">            //保存到请求参数</div><div class="line">            .flatMap(tokenResponse -&gt; &#123;</div><div class="line">                requestValue.setToken(TokenMapper.toTokenEntity(tokenResponse.getData().get(0)));</div><div class="line">                return Observable.just(requestValue);</div><div class="line">            &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>附录<br><a href="https://mcxiaoke.gitbooks.io/rxdocs/content/" target="_blank" rel="external">操作符</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/框架源码/" rel="tag"># 框架源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/15/learning_for_activity_1/" rel="next" title="Android Activity笔记">
+                <i class="fa fa-chevron-left"></i> Android Activity笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/14/rxjava_1.0_A/"
+           data-title="RxJava源码的正确打开方式 一" data-url="http://haocc.me/2016/10/14/rxjava_1.0_A/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png"
+              alt="haocc" />
+          
+            <p class="site-author-name" itemprop="name">haocc</p>
+            <p class="site-description motion-element" itemprop="description">移动开发技术和个人博客</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/haohao007" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#响应式编程思维"><span class="nav-number">1.</span> <span class="nav-text">响应式编程思维</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What"><span class="nav-number">1.1.</span> <span class="nav-text">What</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why"><span class="nav-number">1.2.</span> <span class="nav-text">Why</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">1.3.</span> <span class="nav-text">Demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Action、Function"><span class="nav-number">2.1.</span> <span class="nav-text">Action、Function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observable"><span class="nav-number">2.2.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subscriber"><span class="nav-number">2.3.</span> <span class="nav-text">Subscriber</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Subscription"><span class="nav-number">2.3.1.</span> <span class="nav-text">Subscription</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Producer-backpressure"><span class="nav-number">2.3.2.</span> <span class="nav-text">Producer　(backpressure)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本原理"><span class="nav-number">2.4.</span> <span class="nav-text">基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一般代码"><span class="nav-number">2.4.1.</span> <span class="nav-text">一般代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要源码"><span class="nav-number">2.4.2.</span> <span class="nav-text">主要源码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进阶"><span class="nav-number">3.</span> <span class="nav-text">进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Operator"><span class="nav-number">3.1.</span> <span class="nav-text">Operator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一般代码-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">一般代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要源码分析"><span class="nav-number">3.1.2.</span> <span class="nav-text">主要源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#OnSubscribeLift"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">OnSubscribeLift</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OperatorMap"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">OperatorMap</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个Demo"><span class="nav-number">4.</span> <span class="nav-text">一个Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#业务需求如下："><span class="nav-number">4.1.</span> <span class="nav-text">业务需求如下：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">4.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">haocc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"haocc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

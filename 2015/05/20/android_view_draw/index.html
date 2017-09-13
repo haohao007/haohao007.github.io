@@ -104,7 +104,7 @@
 <meta property="og:description" content="知其所以然，方能创新。要期望的动画效果，或者自定义视图就必须深入了解Android视图绘制的原理。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_view_draw.png">
-<meta property="og:updated_time" content="2015-09-15T02:30:38.000Z">
+<meta property="og:updated_time" content="2017-09-13T06:50:01.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android View绘制">
 <meta name="twitter:description" content="知其所以然，方能创新。要期望的动画效果，或者自定义视图就必须深入了解Android视图绘制的原理。">
@@ -394,7 +394,7 @@
       
 
       
-        <p>#View 绘制机制<br>&emsp;&emsp;当Activity接收到焦点的时候，它会被请求绘制布局,该请求由 Android framework处理.绘制是从根节点开始，对布局树进行measure和draw。整个View树的绘图流程在<code>ViewRoot.java</code>类的<code>performTraversals()</code>函数展开。该函数所做的工作可简单概括为是否需要重新计算视图大小(measure)、是否需要重新安置视图的位置(layout)、以及是否需要重绘(draw)，流程图如下：<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_view_draw.png" alt="view绘制流程"></p>
+        <h1 id="View-绘制机制"><a href="#View-绘制机制" class="headerlink" title="View 绘制机制"></a>View 绘制机制</h1><p>&emsp;&emsp;当Activity接收到焦点的时候，它会被请求绘制布局,该请求由 Android framework处理.绘制是从根节点开始，对布局树进行measure和draw。整个View树的绘图流程在<code>ViewRoot.java</code>类的<code>performTraversals()</code>函数展开。该函数所做的工作可简单概括为是否需要重新计算视图大小(measure)、是否需要重新安置视图的位置(layout)、以及是否需要重绘(draw)，流程图如下：<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_view_draw.png" alt="view绘制流程"></p>
 
       
     </div>
@@ -495,8 +495,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <img class="site-author-image" itemprop="image"
@@ -514,7 +523,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -536,7 +545,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -569,6 +578,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#View-绘制机制"><span class="nav-number">1.</span> <span class="nav-text">View 绘制机制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
