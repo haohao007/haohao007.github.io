@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="框架源码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。这是第二弹了。下次总结分享的应该是RxJava2.0了">
+<meta name="keywords" content="框架源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava源码的正确打开方式 二">
+<meta property="og:url" content="http://haocc.me/2016/12/22/rxjava_1.0_B/index.html">
+<meta property="og:site_name" content="橘子风车の博客">
+<meta property="og:description" content="在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。这是第二弹了。下次总结分享的应该是RxJava2.0了">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_03.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_04.png">
+<meta property="og:updated_time" content="2017-09-13T08:14:29.030Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava源码的正确打开方式 二">
+<meta name="twitter:description" content="在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。这是第二弹了。下次总结分享的应该是RxJava2.0了">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://haocc.me/2016/12/22/rxjava_1.0_B/"/>
+
+
+
+
+
+  <title>RxJava源码的正确打开方式 二 | 橘子风车の博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?291ffd01144d4a281f8b8611ac894df9";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">橘子风车の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">代码如诗，诗如代码</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://haocc.me/2016/12/22/rxjava_1.0_B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="haocc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="橘子风车の博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RxJava源码的正确打开方式 二</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-22T21:00:00+08:00">
+                2016-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/22/rxjava_1.0_B/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/22/rxjava_1.0_B/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  在研读了RxJava的框架源码后，感悟较深。在工作上与团队同事做出PPT分享的同时，也在此记录总结。这是第二弹了。下次总结分享的应该是RxJava2.0了
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一段代码"><a href="#一段代码" class="headerlink" title="一段代码"></a>一段代码</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">Observable</div><div class="line">        .create(new Observable.OnSubscribe&lt;String&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void call(Subscriber&lt;? super String&gt; subscriber) &#123;</div><div class="line">                subscriber.onNext(&quot;hello&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">        .subscribeOn(Schedulers.newThread())</div><div class="line">        .observeOn(AndroidSchedulers.mainThread())</div><div class="line">        .subscribe(new Subscriber&lt;String&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public void onCompleted() &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">            @Override</div><div class="line">            public void onError(Throwable e) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">            @Override</div><div class="line">            public void onNext(String s) &#123;</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>这段代码是最简单的，但是有很多东西值得我们去思考。</p>
+<h1 id="subscribeOn"><a href="#subscribeOn" class="headerlink" title="subscribeOn"></a>subscribeOn</h1><p>原义：在特定的线程调度中，Observers(观察者)对Observable (可观察对象)进行异步订阅。<br>在特定的线程调度中，进行异步订阅。<br>在特定线程中，进行订阅。<br>在线程中，订阅。</p>
+<p>结论：(内部)订阅这一动作(call方法)是发生在指定线程的。</p>
+<h2 id="主要源码"><a href="#主要源码" class="headerlink" title="主要源码"></a>主要源码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public final Observable&lt;T&gt; subscribeOn(Scheduler scheduler) &#123;</div><div class="line">    ....</div><div class="line">    return create(new OperatorSubscribeOn&lt;T&gt;(this, scheduler));</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static &lt;T&gt; Observable&lt;T&gt; create(OnSubscribe&lt;T&gt; f) &#123;</div><div class="line">    return new Observable&lt;T&gt;(hook.onCreate(f));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其实。这里的Create是等价于Lift。那OperatorSubscribeOn是不是就是<br>Operator(Func1<subscriber<? super="" r="">, Subscriber&lt;? super T&gt;&gt;)呢，<br>有输入输出的那种。<br> <strong>答案是否定的！</strong></subscriber<?></p>
+<h2 id="OperatorSubscribeOn"><a href="#OperatorSubscribeOn" class="headerlink" title="OperatorSubscribeOn"></a>OperatorSubscribeOn</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"> OperatorSubscribeOn&lt;T&gt; implements OnSubscribe&lt;T&gt;</div><div class="line"> public void call(final Subscriber&lt;? super T&gt; subscriber) &#123;</div><div class="line">        final Worker inner = scheduler.createWorker();</div><div class="line">        ...</div><div class="line">        inner.schedule(new Action0() &#123;</div><div class="line">            public void call() &#123;</div><div class="line">                     final Thread t = Thread.currentThread();</div><div class="line">                     Subscriber&lt;T&gt; s = new Subscriber&lt;T&gt;(subscriber) &#123;</div><div class="line">                     public void onNext(T t) &#123;</div><div class="line">                          subscriber.onNext(t);</div><div class="line">                     &#125;</div><div class="line">                     public void onCompleted() &#123;</div><div class="line">                          try &#123; subscriber.onCompleted();&#125;</div><div class="line">		                        finally &#123; inner.unsubscribe();&#125;</div><div class="line">                     &#125;</div><div class="line">		                 ...</div><div class="line">	                   &#125;</div><div class="line">	                   source.unsafeSubscribe(s);</div><div class="line">	           &#125;</div><div class="line">       &#125;</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> public final Subscription unsafeSubscribe(Subscriber&lt;? super T&gt; subscriber) &#123;</div><div class="line">        try &#123;</div><div class="line">            subscriber.onStart();</div><div class="line">            hook.onSubscribeStart(this, onSubscribe).call(subscriber);</div><div class="line">            return hook.onSubscribeReturn(subscriber);</div><div class="line">        &#125; catch (Throwable e) &#123;</div><div class="line">            ...</div><div class="line">            return Subscriptions.unsubscribed();</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> Tip：Use this only for implementing an {@link Operator} that requires nested subscriptions. For other<br>purposes, use {@link #subscribe(Subscriber)} which ensures<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_01.png" alt="subscribeOn基本原理"></p>
+<h1 id="observeOn"><a href="#observeOn" class="headerlink" title="observeOn"></a>observeOn</h1><p>原义：修改一个(Observable)可观察的对象，使其能在特定的线程，在缓存器的基础上进行发射和通知。<br>           即指定通知事件发送的线程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public final Observable&lt;T&gt; observeOn(Scheduler scheduler, boolean delayError, int bufferSize) &#123;</div><div class="line">                 return lift(new OperatorObserveOn&lt;T&gt;(scheduler, delayError, bufferSize))</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>参数：</p>
+<ul>
+<li>scheduler ：指定的线程调度器</li>
+<li>delayError ：是否延迟发布错误通知，默认是false<br>源码理解：为false，onNext -&gt; onError<br>为true，onNext -&gt; Queue -&gt; check upstream &amp; inner subscriptions -&gt; onError</li>
+<li>bufferSize ：指定缓存器的大小，默认是RxRingBuffer.SIZE</li>
+</ul>
+<p>Tip:<br>RxRingBuffer：由Queue和 ObjectPool实现的高级缓存器，有SPSC和SPMC两种算法的实现。<br>        这表明只能有一个单一的producer被call，在任何方法里。–RxJava内部约定</p>
+<p>那么问题来了，OperatorObserveOn是不是像OperatorSubscribeOn一样实现了Action接口的呢，无返回值的那种。<br><strong>答案又是否定的！</strong></p>
+<h2 id="OperatorObserveOn"><a href="#OperatorObserveOn" class="headerlink" title="OperatorObserveOn"></a>OperatorObserveOn</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">OperatorObserveOn&lt;T&gt; implements Operator&lt;T, T&gt;</div><div class="line"></div><div class="line">Call方法</div><div class="line">public Subscriber&lt;? super T&gt; call(Subscriber&lt;? super T&gt; child) &#123;</div><div class="line">        if (scheduler instanceof ImmediateScheduler) &#123;</div><div class="line">            return child;</div><div class="line">        &#125; else if (scheduler instanceof TrampolineScheduler) &#123;</div><div class="line">            return child;</div><div class="line">        &#125; else &#123;</div><div class="line">            ObserveOnSubscriber&lt;T&gt; parent = new ObserveOnSubscriber&lt;T&gt;(scheduler, child, delayError, bufferSize);</div><div class="line">            parent.init();</div><div class="line">            return parent;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ImmediateScheduler  &amp;  TrampolineScheduler ：<br>都表示当前线程，区别在于前者是立刻执行的(默认的线程调度)。后者是先放入队列，<br>在当前工作单元完成后才会执行。</p>
+<h2 id="ObserveOnSubscriber"><a href="#ObserveOnSubscriber" class="headerlink" title="ObserveOnSubscriber"></a>ObserveOnSubscriber</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">private static final class ObserveOnSubscriber&lt;T&gt; extends Subscriber&lt;T&gt; implements Action0</div><div class="line"></div><div class="line">以onNext为例</div><div class="line">public void onNext(final T t) &#123;</div><div class="line">     if (isUnsubscribed() || finished) &#123;</div><div class="line">          return;</div><div class="line">     &#125;</div><div class="line">     if (!queue.offer(on.next(t))) &#123;</div><div class="line">         onError(new MissingBackpressureException());</div><div class="line">         return;</div><div class="line">     &#125;</div><div class="line">     schedule();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>queue：是一个实现了SPSC算法的对象队列，SIZE默认依据是缓存器的<br>on： NotificationLite<t>，通知。实际是用泛型代替了类型强转，可减低对象创建和分配的成本</t></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">schedule方法</div><div class="line">protected void schedule() &#123;</div><div class="line">     if (counter.getAndIncrement() == 0) &#123;</div><div class="line">         recursiveScheduler.schedule(this);</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>源码理解<br>counter：计数器AtomicLong，初始值为0，线程安全，保证recursiveScheduler.schedule只执行一次<br>     getAndIncrement() 返回当前的值，并+1，在recursiveScheduler.schedule方法内调用addAndGet(-missed)<br>recursiveScheduler：工作者Scheduler.Worker，在ObserveOnSubscriber构造方法时调用scheduler.create创建</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">实现了Action0的call方法，recursiveScheduler.schedule(this)即是调用了该call方法</div><div class="line">public void call() &#123;</div><div class="line">    long missed = 1L;</div><div class="line">    ...</div><div class="line">    final Queue&lt;Object&gt; q = this.queue;                            //对象队列</div><div class="line">    final Subscriber&lt;? super T&gt; localChild = this.child;           //下流的subscriber</div><div class="line">    final NotificationLite&lt;T&gt; localOn = this.on;                   //对应的通知</div><div class="line">    for (;;) &#123;</div><div class="line">           long requestAmount = requested.get();</div><div class="line">           while (requestAmount != currentEmission) &#123;</div><div class="line">                  ...</div><div class="line">                  Object v = q.poll();                             //从对象队列取出</div><div class="line">                  localChild.onNext(localOn.getValue(v));          //包装成通知事件向下传递</div><div class="line">                  ...                                              //重点在此！这样，onNext就发生在指定的线程调度上了</div><div class="line">           &#125;</div><div class="line">           ...</div><div class="line">           missed = counter.addAndGet(-missed);</div><div class="line">           if (missed == 0L) &#123;</div><div class="line">                break;</div><div class="line">           &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_02.png" alt="ObserveOnSubscriber基本原理"></p>
+<h2 id="一个值得思考的问题"><a href="#一个值得思考的问题" class="headerlink" title="一个值得思考的问题"></a>一个值得思考的问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Observable</div><div class="line">.map                      // 操作1</div><div class="line">.flatMap                	// 操作2</div><div class="line">.subscribeOn(new)</div><div class="line">.map                      //操作3</div><div class="line">.flatMap                 	//操作4</div><div class="line">.observeOn(main)</div><div class="line">.map                      //操作5</div><div class="line">.flatMap                  //操作6</div><div class="line">.subscribeOn(io)</div><div class="line">.subscribe(Subscriber)</div></pre></td></tr></table></figure>
+<p>问题：以上各个操作分别发生在哪个线程？<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_03.png" alt="问题流程"><br>答案：操作1、2、3、4发生在new线程。操作5、6发生在main线程</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><ol>
+<li>大多数情况，产生内容和消费内容是在同一线程的</li>
+<li>当有连续多个subscribeOn()存在时，仅第一个(最邻近)的那个subscribeOn()起作用</li>
+<li>起作用的subscribeOn() 控制从流程开始的第一个操作，直到遇到第一个 observeOn()</li>
+<li>observeOn() 可以使用多次，每个observeOn()将导致一次线程切换，这次切换开始于这次 observeOn的下一个操作</li>
+<li>不论是subscribeOn() 还是 observeOn()，每次线程切换如果不受到下一个observeOn() 的干预，线程将不再改变，不会自动切换到其他线程。</li>
+<li>上述的“操作”包括订阅，事件产生，操作符操作事件</li>
+</ol>
+<h1 id="Schedulers"><a href="#Schedulers" class="headerlink" title="Schedulers"></a>Schedulers</h1><p>线程调度相关的工具类(static)，提供了ComputationScheduler、IoScheduler、newThreadScheduler实例获取方式。<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/rxjava_1.0_B/rxjava_1.0_B_04.png" alt="Schedulers类图"></p>
+<p>这里以NewThreadScheduler为例分析：<br>1.内部成员仅有ThreadFactory，继承并实现了Scheduler抽象类的createWorker方法，返回NewThreadWorker。<br>2.Scheduler的内部类Worker，有线程调度(工作执行)的方法schedule。而schedulePeriodically方法，是利用递归实现的周期性执行。<br>3.NewThreadWorker继承并实现了Worker的schedule方法，且内部有具备线程调度能力的ScheduledExecutorService<br>结论：重点看NewThreadWorker以及NewThreadWorker的schedule方法！！！</p>
+<h2 id="NewThreadWorker"><a href="#NewThreadWorker" class="headerlink" title="NewThreadWorker"></a>NewThreadWorker</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">构造方法</div><div class="line">public NewThreadWorker(ThreadFactory threadFactory) &#123;</div><div class="line">        ScheduledExecutorService exec = Executors.newScheduledThreadPool(1, threadFactory);</div><div class="line">        boolean cancelSupported = tryEnableCancelPolicy(exec);</div><div class="line">        if (!cancelSupported &amp;&amp; exec instanceof ScheduledThreadPoolExecutor) &#123;</div><div class="line">            registerExecutor((ScheduledThreadPoolExecutor)exec);</div><div class="line">        &#125;</div><div class="line">        schedulersHook = RxJavaPlugins.getInstance().getSchedulersHook();</div><div class="line">        executor = exec;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关于Future：<br>对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果、设置结果操作等<br>在RxJava中有重大的存在意义，像取消订阅，流数据集阻塞缓存等。<br>避免内存泄露优化<br>tryEnableCancelPolicy：利用反射做一个方法代理。Future被cancel之后执行从线程池移除的操作(Java7+支持)<br>registerExecutor：对于给定的executor进行注册，并且开启一个线程去清洗。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">ScheduledAction scheduleActual(Action0 action, long delayTime, TimeUnit unit, CompositeSubscription parent) &#123;</div><div class="line">        Action0 decoratedAction = schedulersHook.onSchedule(action);</div><div class="line">        ScheduledAction run = new ScheduledAction(decoratedAction, parent);</div><div class="line">        parent.add(run);</div><div class="line">        Future&lt;?&gt; f;</div><div class="line">        if (delayTime &lt;= 0) &#123;</div><div class="line">            f = executor.submit(run);</div><div class="line">        &#125; else &#123;</div><div class="line">            f = executor.schedule(run, delayTime, unit);</div><div class="line">        &#125;</div><div class="line">        run.add(f);</div><div class="line">        return run;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ScheduledAction：继承 AtomicReference<thread>,实现Runnable。简单地理解：本质上就是个线程方法。<br>那么重点看run方法就好了。</thread></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">ScheduledAction</div><div class="line">public void run() &#123;</div><div class="line">        try &#123;</div><div class="line">            lazySet(Thread.currentThread());</div><div class="line">            action.call();</div><div class="line">        &#125; catch (Throwable e) &#123;</div><div class="line">            ...</div><div class="line">            RxJavaPlugins.getInstance().getErrorHandler().handleError(ie);</div><div class="line">            Thread thread = Thread.currentThread();</div><div class="line">            thread.getUncaughtExceptionHandler().uncaughtException(thread, ie);</div><div class="line">        &#125; finally &#123;</div><div class="line">            unsubscribe();</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，Action就在指定的线程里运行了。</p>
+<h1 id="AndroidSchedulers-mainThread"><a href="#AndroidSchedulers-mainThread" class="headerlink" title="AndroidSchedulers.mainThread()"></a>AndroidSchedulers.mainThread()</h1><p>源码定义及实例化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Scheduler mainThreadScheduler</div><div class="line">mainThreadScheduler = new LooperScheduler(Looper.getMainLooper())</div></pre></td></tr></table></figure></p>
+<p>So：这货本质上也是个Scheduler。RxJava前面的工作都保持不变，只是在最后一步的线程切换中适配了Android特定的UI主线程。说到这里，大概也都能猜到LooperScheduler的实现方式了。<br>思路引导：LooperScheduler.createWorker() -&gt; HandlerWorker -&gt;  schedule()<br>这里补充一下ScheduleAction，套路都是一样的。实现了Runnable，在run方法里去执行action.call()方法。<br>备注：这里action，就是在RxJava源代码流程的ObserveOnSubscriber的call()方法，结合该类保存的Scheduler，在call()方法中切换了上流的onNext、onError、onComplete执行的线程。</p>
+<h2 id="HandlerWorker"><a href="#HandlerWorker" class="headerlink" title="HandlerWorker"></a>HandlerWorker</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public Subscription schedule(Action0 action, long delayTime, TimeUnit unit) &#123;</div><div class="line">            ...</div><div class="line">            ScheduledAction scheduledAction = new ScheduledAction(action, handler);</div><div class="line">            Message message = Message.obtain(handler, scheduledAction);</div><div class="line">            message.obj = this;</div><div class="line">            handler.sendMessageDelayed(message, unit.toMillis(delayTime));</div><div class="line">            if (unsubscribed) &#123;</div><div class="line">                handler.removeCallbacks(scheduledAction);</div><div class="line">                return Subscriptions.unsubscribed();</div><div class="line">            &#125;</div><div class="line">            return scheduledAction;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Handler + Looper：该Handler是由主Looper(存在于应用的主线程中，即所谓的UI线程)创建的。用Message.obtain(Handler,Runnable)方法创建一个消息，并由handler发送该消息。当该消息被主线程响应时，会在主线程执行schedulerAction.call()方法。<br>贯彻RxJava模式的实现点：创建Message时将对象引用赋予obj属性(类似Token)，在解除订阅时根据该Token，对消息进行除(removeCallbacksAndMessages)。与Future.cancel()本质意义一致。</p>
+<p>以上。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/框架源码/" rel="tag"># 框架源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/14/rxjava_1.0_A/" rel="next" title="RxJava源码的正确打开方式 一">
+                <i class="fa fa-chevron-left"></i> RxJava源码的正确打开方式 一
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/22/rxjava_1.0_B/"
+           data-title="RxJava源码的正确打开方式 二" data-url="http://haocc.me/2016/12/22/rxjava_1.0_B/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/avatar.png"
+              alt="haocc" />
+          
+            <p class="site-author-name" itemprop="name">haocc</p>
+            <p class="site-description motion-element" itemprop="description">移动开发技术和个人博客</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/haohao007" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一段代码"><span class="nav-number">1.</span> <span class="nav-text">一段代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#subscribeOn"><span class="nav-number">2.</span> <span class="nav-text">subscribeOn</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要源码"><span class="nav-number">2.1.</span> <span class="nav-text">主要源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OperatorSubscribeOn"><span class="nav-number">2.2.</span> <span class="nav-text">OperatorSubscribeOn</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#observeOn"><span class="nav-number">3.</span> <span class="nav-text">observeOn</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OperatorObserveOn"><span class="nav-number">3.1.</span> <span class="nav-text">OperatorObserveOn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ObserveOnSubscriber"><span class="nav-number">3.2.</span> <span class="nav-text">ObserveOnSubscriber</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个值得思考的问题"><span class="nav-number">3.3.</span> <span class="nav-text">一个值得思考的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Schedulers"><span class="nav-number">5.</span> <span class="nav-text">Schedulers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NewThreadWorker"><span class="nav-number">5.1.</span> <span class="nav-text">NewThreadWorker</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AndroidSchedulers-mainThread"><span class="nav-number">6.</span> <span class="nav-text">AndroidSchedulers.mainThread()</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HandlerWorker"><span class="nav-number">6.1.</span> <span class="nav-text">HandlerWorker</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 &mdash; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">haocc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"haocc"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
