@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="生活,心情," />
+  <meta name="keywords" content="permission," />
 
 
 
@@ -95,18 +95,23 @@
 
 
 
-<meta name="description" content="不。这是个新的开始。刚刚开始。">
-<meta name="keywords" content="生活,心情">
+<meta name="description" content="在工作负责的项目做完android 6.0权限兼容的方案后，于此记录总结。">
+<meta name="keywords" content="permission">
 <meta property="og:type" content="article">
-<meta property="og:title" content="伊始">
-<meta property="og:url" content="http://haocc.me/2015/02/08/start_for_new/index.html">
+<meta property="og:title" content="Android 6.0 权限兼容">
+<meta property="og:url" content="http://haocc.me/2017/05/09/android_permission_for_6.0/index.html">
 <meta property="og:site_name" content="橘子风车の博客">
-<meta property="og:description" content="不。这是个新的开始。刚刚开始。">
+<meta property="og:description" content="在工作负责的项目做完android 6.0权限兼容的方案后，于此记录总结。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2015-09-28T09:19:46.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_01.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_04.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_02.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_03.png">
+<meta property="og:updated_time" content="2017-09-14T00:21:47.363Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="伊始">
-<meta name="twitter:description" content="不。这是个新的开始。刚刚开始。">
+<meta name="twitter:title" content="Android 6.0 权限兼容">
+<meta name="twitter:description" content="在工作负责的项目做完android 6.0权限兼容的方案后，于此记录总结。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_01.png">
 
 
 
@@ -136,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="http://haocc.me/2015/02/08/start_for_new/"/>
+  <link rel="canonical" href="http://haocc.me/2017/05/09/android_permission_for_6.0/"/>
 
 
 
 
 
-  <title>伊始 | 橘子风车の博客</title>
+  <title>Android 6.0 权限兼容 | 橘子风车の博客</title>
   
 
 
@@ -289,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://haocc.me/2015/02/08/start_for_new/">
+    <link itemprop="mainEntityOfPage" href="http://haocc.me/2017/05/09/android_permission_for_6.0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="haocc">
@@ -306,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">伊始</h1>
+          <h1 class="post-title" itemprop="name headline">Android 6.0 权限兼容</h1>
         
 
         <div class="post-meta">
@@ -318,8 +323,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-08T21:00:00+08:00">
-                2015-02-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-09T21:00:00+08:00">
+                2017-05-09
               </time>
             
 
@@ -341,8 +346,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/经历/" itemprop="url" rel="index">
-                    <span itemprop="name">经历</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
 
@@ -359,8 +364,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2015/02/08/start_for_new/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/08/start_for_new/" itemprop="commentCount"></span>
+                <a href="/2017/05/09/android_permission_for_6.0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/09/android_permission_for_6.0/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -375,7 +380,7 @@
 
           
               <div class="post-description">
-                  不。这是个新的开始。刚刚开始。
+                  在工作负责的项目做完android 6.0权限兼容的方案后，于此记录总结。
               </div>
           
 
@@ -392,12 +397,20 @@
       
 
       
-        <p>&emsp;&emsp;生活。总该做点自己喜欢的事情呢。</p>
-<p>&emsp;&emsp;初入大学，懵懵懂懂选择了软件工程专业，就注定了后来的一波三折。以前，轻微的二次元中二病。觉得，科技完全是可以改变世界的。事实上，确实如此。只是并不是人人都可以做到的。或者准确地说，只有极少数人能够做到。而我肯定不在极少数人里。</p>
-<p>&emsp;&emsp;此时，大学时光已过三年。一年，玩玩乐乐体验大学和城市生活，虽碌碌无为却一点都不后悔。一年，磕磕碰碰与代码相伴苦中作乐，虽学习缓慢却好像有好的趋势。一年，忙忙碌碌初入社会思索未来，虽有过迷茫却总算知道了大概的路。现在，大学还有一年。</p>
-<p>&emsp;&emsp;像大部分拥有赤子之心的程序猿一样，一直都想亲自去实践做一个有趣的玩意儿，或者一个网站，或者一个APP，或者一个平台，甚至一个算法。我喜欢简单，但不代表我没有做复杂事情的能力。因为，我知道我曾经认真做事时的模样。这一点，人人都可以做到。</p>
-<p>&emsp;&emsp;是时候该开始了。做自己喜欢的事情，顺便让自己变得优秀。就像我现在，席地而坐，晒着太阳，听着歌，喝喝茶，打打代码，偶尔发发呆，写写博客。生活虽然很现实，但最重要的是顺心而为，开心就好。最简单不过如此：不行就分，喜欢就买，多喝点水，重启试试。</p>
-<p>&emsp;&emsp;嘻嘻。仅以此，记录与分享技术与经历。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>从 Android 6.0（API 级别 23）开始，用户开始在应用运行时向其授予权限，而不是在应用安装时授予</p>
+<h1 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h1><p>系统权限分为两类：正常权限和危险权限：<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_01.png" alt="权限组"></p>
+<h2 id="正常权限"><a href="#正常权限" class="headerlink" title="正常权限"></a>正常权限</h2><p>正常权限不会直接给用户隐私权带来风险，系统将自动授予该权限</p>
+<h2 id="危险权限"><a href="#危险权限" class="headerlink" title="危险权限"></a>危险权限</h2><p>危险权限会授予应用访问用户机密数据的权限，用户必须明确批准您的应用使用这些权限</p>
+<p>如果设备运行的是 Android 6.0 或更高版本，或者应用的目标 SDK 为 23 或更高：应用必须在清单中列出权限，并且它必须在运行时请求其需要的每项危险权限。用户可以授予或拒绝每项权限，且即使用户拒绝权限请求，应用仍可以继续运行有限的功能。</p>
+<p>Android提供了支持库来检查和请求权限，Android框架从6.0开始提供类似方法，不过使用支持库的方法不用检查运行的Android版本。</p>
+<p>以下针对危险权限，<br>每次执行需要这一权限的操作时您都必须检查自己是否具有该权限，用户随时可以更改这个权限，即使上次运行了相机，也不能保证这次运行仍然有相机权限，一般用户拒绝权限或权限失效（没有权限仍然运行相关代码）有可能抛出 SecurityException，但不是每个地方都会，此外拒绝权限我们可能拿到一个空指针比如sd卡路径。</p>
+<h1 id="权限兼容流程"><a href="#权限兼容流程" class="headerlink" title="权限兼容流程"></a>权限兼容流程</h1><p><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_04.png" alt="权限兼容流程"></p>
+<h2 id="检查权限"><a href="#检查权限" class="headerlink" title="检查权限"></a>检查权限</h2><p> ContextCompat.checkSelfPermission()，<br>有权限，返回 PackageManager.PERMISSION_GRANTED<br>没有权限，返回PERMISSION_DENIED</p>
+<h2 id="请求权限"><a href="#请求权限" class="headerlink" title="请求权限"></a>请求权限</h2><p>ActivityCompat.requestPermissions(）(或Fragment.requestPermissions())，传所需权限和用于识别这次请求的一个int型的requestCode，调用这个方法会显示一个标准的Android对话框询问用户是否授予权限，这个对话框不能自定义。而且对话框不会列出具体的权限，而是说明了应用要访问的权限组（Android权限的分组），如请求read_contacts权限，系统对话框只显示应用需要访问设备的联系人，而且一旦用户授予了，权限组中的其他权限也将自动授予。但即使如此，对于同一权限组中的不同权限，我们仍然应该需要都去检查和请求，因为权限分组可能会发生变化<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_02.png" alt="请求权限示意图"></p>
+<h2 id="处理请求结果"><a href="#处理请求结果" class="headerlink" title="处理请求结果"></a>处理请求结果</h2><p>在用户响应对话框之后，用户的操作结果会通过回调方法activity.onRequestPermissionsResult（或Fragment.onRequestPermissionsResult）返回<br><img src="https://raw.githubusercontent.com/haohao007/MarkDownImage/master/android_permission_for_6.0/android_permission_03.png" alt="处理请求示意图"></p>
+<p>Android还提供了一个方法，shouldShowRequestPermissionRationale()，如果应用之前请求过权限但用户拒绝了请求，此方法返回true，但如果用户勾选了不再询问，返回false，一旦用户拒绝并勾选了不再询问，每次 requestPermissions()，系统都会立即拒绝这个权限请求。这也意味着，我们可以得知用户的操作，之后做出相应处理，允许的时候运行正常功能，拒绝和拒绝且不再询问的时候，向用户解释说明为什么需要这个对话框</p>
+<h1 id="另请参阅："><a href="#另请参阅：" class="headerlink" title="另请参阅："></a>另请参阅：</h1><p>1、<a href="https://developer.android.com/training/permissions/best-practices.html#testing" target="_blank" rel="external">权限最佳做法</a><br>主要有2点<br>建议通过intent调起别的app来运行对应功能，比如相机<br>和使用adb工具测试两种权限模式</p>
+<p>2、<a href="https://developer.android.com/guide/topics/security/permissions.html#permissions" target="_blank" rel="external">系统权限最佳指南</a>：主要介绍自定义权限和URI权限</p>
 
       
     </div>
@@ -415,9 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/生活/" rel="tag"># 生活</a>
-          
-            <a href="/tags/心情/" rel="tag"># 心情</a>
+            <a href="/tags/permission/" rel="tag"># permission</a>
           
         </div>
       
@@ -430,15 +441,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/03/22/fresco_mark/" rel="next" title="fresco源码研读杂记">
+                <i class="fa fa-chevron-left"></i> fresco源码研读杂记
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/02/16/android_webview/" rel="prev" title="Android WebView笔记">
-                Android WebView笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -468,8 +479,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/02/08/start_for_new/"
-           data-title="伊始" data-url="http://haocc.me/2015/02/08/start_for_new/">
+      <div class="ds-thread" data-thread-key="2017/05/09/android_permission_for_6.0/"
+           data-title="Android 6.0 权限兼容" data-url="http://haocc.me/2017/05/09/android_permission_for_6.0/">
       </div>
     
   </div>
@@ -494,8 +505,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <img class="site-author-image" itemprop="image"
@@ -568,6 +588,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限"><span class="nav-number">2.</span> <span class="nav-text">权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正常权限"><span class="nav-number">2.1.</span> <span class="nav-text">正常权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#危险权限"><span class="nav-number">2.2.</span> <span class="nav-text">危险权限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限兼容流程"><span class="nav-number">3.</span> <span class="nav-text">权限兼容流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#检查权限"><span class="nav-number">3.1.</span> <span class="nav-text">检查权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求权限"><span class="nav-number">3.2.</span> <span class="nav-text">请求权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理请求结果"><span class="nav-number">3.3.</span> <span class="nav-text">处理请求结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#另请参阅："><span class="nav-number">4.</span> <span class="nav-text">另请参阅：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
